@@ -15,11 +15,5 @@ git add ./
 and
 
 ```
-git push
-```
-
-and
-
-```
 git commit --allow-empty -m "　"
 ```
