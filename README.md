@@ -27,44 +27,99 @@ git push
 # 入力エクセル
 
 ## 3gpp
-### ① 日本語ラベル
-| 行 | A列（ラベル）       | B列                                                                 |
-|---:|----------------------|----------------------------------------------------------------------|
-|  1 | 日付                 | 20251018                                                             |
-|  2 | 案件番号             | 特願20XX-XXXXXX                                                       |
-|  3 | TSG                  | tsg_ran                                                              |
-|  4 | 作業部会(WG)         | WG2_RL2                                                              |
-|  5 | 会期/会合(シリーズ)  | TSGR2_105bis                                                         |
-|  6 | 文書ディレクトリURL  | https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs          |
+<!-- 3GPP｜① 日本語ラベル -->
+<table style="width:100%;table-layout:fixed;border-collapse:collapse;">
+  <colgroup>
+    <col style="width:8%">
+    <col style="width:22%">
+    <col style="width:70%">
+  </colgroup>
+  <thead>
+    <tr>
+      <th style="border:1px solid #ccc;padding:6px 8px;text-align:right;">行</th>
+      <th style="border:1px solid #ccc;padding:6px 8px;">A列（ラベル）</th>
+      <th style="border:1px solid #ccc;padding:6px 8px;">B列</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">1</td><td style="border:1px solid #ccc;padding:6px 8px;">日付</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">20251018</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">2</td><td style="border:1px solid #ccc;padding:6px 8px;">案件番号</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">特願20XX-XXXXXX</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">3</td><td style="border:1px solid #ccc;padding:6px 8px;">TSG</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">tsg_ran</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">4</td><td style="border:1px solid #ccc;padding:6px 8px;">作業部会(WG)</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">WG2_RL2</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">5</td><td style="border:1px solid #ccc;padding:6px 8px;">会期/会合(シリーズ)</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">TSGR2_105bis</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">6</td><td style="border:1px solid #ccc;padding:6px 8px;">文書ディレクトリURL</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs</td></tr>
+  </tbody>
+</table>
 
-### ② 変数名（snake_case）
-| 行 | A列（変数名） | B列                                                                 |
-|---:|----------------------|----------------------------------------------------------------------|
-|  1 | date                 | 20251018                                                             |
-|  2 | case_id              | 特願20XX-XXXXXX                                                       |
-|  3 | tsg                  | tsg_ran                                                              |
-|  4 | wg                   | WG2_RL2                                                              |
-|  5 | series               | TSGR2_105bis                                                         |
-|  6 | docs_url             | https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs          |
+<!-- 3GPP｜② 変数名（snake_case） -->
+<table style="width:100%;table-layout:fixed;border-collapse:collapse;margin-top:10px;">
+  <colgroup>
+    <col style="width:8%">
+    <col style="width:22%">
+    <col style="width:70%">
+  </colgroup>
+  <thead>
+    <tr>
+      <th style="border:1px solid #ccc;padding:6px 8px;text-align:right;">行</th>
+      <th style="border:1px solid #ccc;padding:6px 8px;">A列（変数名）</th>
+      <th style="border:1px solid #ccc;padding:6px 8px;">B列</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">1</td><td style="border:1px solid #ccc;padding:6px 8px;">date</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">20251018</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">2</td><td style="border:1px solid #ccc;padding:6px 8px;">case_id</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">特願20XX-XXXXXX</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">3</td><td style="border:1px solid #ccc;padding:6px 8px;">tsg</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">tsg_ran</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">4</td><td style="border:1px solid #ccc;padding:6px 8px;">wg</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">WG2_RL2</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">5</td><td style="border:1px solid #ccc;padding:6px 8px;">series</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">TSGR2_105bis</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">6</td><td style="border:1px solid #ccc;padding:6px 8px;">docs_url</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs</td></tr>
+  </tbody>
+</table>
 
-## IEEE
-### ① 日本語ラベル
-| 行 | A列（ラベル） | B列                                                                                               |
-|---:|----------------|--------------------------------------------------------------------------------------------------|
-|  1 | 日付           | 20251018                                                                                         |
-|  2 | 案件番号       | 特願20XX-XXXXXX                                                                                  |
-|  3 | タスクグループ | be                                                                                               |
-|  4 | 年             | 2024                                                                                             |
-|  5 | 文書一覧URL    | https://mentor.ieee.org/802.11/documents?n=1&o=7d&is_group=00be&is_year=2024                          |
+<!-- IEEE｜① 日本語ラベル -->
+<table style="width:100%;table-layout:fixed;border-collapse:collapse;margin-top:18px;">
+  <colgroup>
+    <col style="width:8%">
+    <col style="width:22%">
+    <col style="width:70%">
+  </colgroup>
+  <thead>
+    <tr>
+      <th style="border:1px solid #ccc;padding:6px 8px;text-align:right;">行</th>
+      <th style="border:1px solid #ccc;padding:6px 8px;">A列（ラベル）</th>
+      <th style="border:1px solid #ccc;padding:6px 8px;">B列</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">1</td><td style="border:1px solid #ccc;padding:6px 8px;">日付</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">20251018</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">2</td><td style="border:1px solid #ccc;padding:6px 8px;">案件番号</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">特願20XX-XXXXXX</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">3</td><td style="border:1px solid #ccc;padding:6px 8px;">タスクグループ</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">be</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">4</td><td style="border:1px solid #ccc;padding:6px 8px;">年</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">2024</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">5</td><td style="border:1px solid #ccc;padding:6px 8px;">文書一覧URL</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">https://mentor.ieee.org/802.11/documents?n=1&amp;o=7d&amp;is_group=00be&amp;is_year=2024</td></tr>
+  </tbody>
+</table>
 
-### ② 変数名（snake_case）
-| 行 | A列（変数名） | B列                                                                                               |
-|---:|----------------|----------------------------------------------------------------------------------------------------|
-|  1 | date           | 20251018                                                                                           |
-|  2 | case_id        | 特願20XX-XXXXXX                                                                                  |
-|  3 | task_group     | be                                                                                                 |
-|  4 | year           | 2024                                                                                               |
-|  5 | docs_url       | https://mentor.ieee.org/802.11/documents?n=1&o=7d&is_group=00be&is_year=2024                          |
+<!-- IEEE｜② 変数名（snake_case） -->
+<table style="width:100%;table-layout:fixed;border-collapse:collapse;margin-top:10px;">
+  <colgroup>
+    <col style="width:8%">
+    <col style="width:22%">
+    <col style="width:70%">
+  </colgroup>
+  <thead>
+    <tr>
+      <th style="border:1px solid #ccc;padding:6px 8px;text-align:right;">行</th>
+      <th style="border:1px solid #ccc;padding:6px 8px;">A列（変数名）</th>
+      <th style="border:1px solid #ccc;padding:6px 8px;">B列</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">1</td><td style="border:1px solid #ccc;padding:6px 8px;">date</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">20251018</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">2</td><td style="border:1px solid #ccc;padding:6px 8px;">case_id</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">特願20XX-XXXXXX</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">3</td><td style="border:1px solid #ccc;padding:6px 8px;">task_group</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">be</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">4</td><td style="border:1px solid #ccc;padding:6px 8px;">year</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">2024</td></tr>
+    <tr><td style="border:1px solid #ccc;padding:6px 8px;text-align:right;">5</td><td style="border:1px solid #ccc;padding:6px 8px;">docs_url</td><td style="border:1px solid #ccc;padding:6px 8px;word-break:break-all;overflow-wrap:anywhere;">https://mentor.ieee.org/802.11/documents?n=1&amp;o=7d&amp;is_group=00be&amp;is_year=2024</td></tr>
+  </tbody>
+</table>
 
 
 
