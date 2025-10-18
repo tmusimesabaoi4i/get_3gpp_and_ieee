@@ -41,8 +41,8 @@ def truncate_file(
 
 def download_file_safely_msxml2(
         download_url: str,
-        download_path: str,                 # ← ディレクトリ想定
-        filename: str,                      # ← MUST（必須）。拡張子は .html に強制
+        download_path: str,
+        filename: str,
         *,
         session=None,
         proxy: Optional[str] = None,
@@ -63,18 +63,15 @@ def download_file_safely_msxml2(
     pure_filename = os.path.basename(parsed.path) or "download.bin"
     file_extension = os.path.splitext(pure_filename)[1]
 
-    # フォルダ指定への対応
     base = sanitize_filename(os.path.basename(filename))
 
     if not base.lower().endswith((file_extension)):
         base += file_extension
 
-    # download_path\filename.html を作成
     final_path = os.path.join(download_path, base)
     os.makedirs(os.path.dirname(final_path) or ".", exist_ok=True)
     temp_path  = final_path + ".part"
 
-    # 共通ヘッダ（圧縮無効化でバイト範囲のズレ防止）
     common_headers = {
         "User-Agent": user_agent,
         "Accept": "*/*",
@@ -85,19 +82,15 @@ def download_file_safely_msxml2(
     if referer:
         common_headers["Referer"] = referer
 
-    # Cookie を session から付与
     cookie_hdr = cookie_header_from_session(session, download_url)
     if cookie_hdr:
         common_headers["Cookie"] = cookie_hdr
 
-    # タイムアウト（ms）
     tms = (connect_timeout * 1000, connect_timeout * 1000, read_timeout * 1000, read_timeout * 1000)
     pxy = normalize_proxy_for_msxml2(proxy)
 
-    # 1) HEAD プローブ
     total_size, accept_ranges, if_range_token = probe_remote_msxml2(download_url, common_headers, tms, pxy)
 
-    # 2) .part 整合チェック
     part_size0 = current_partial_size(temp_path)
     if total_size is not None and total_size >= 0:
         if part_size0 == total_size:
@@ -118,7 +111,6 @@ def download_file_safely_msxml2(
         if not accept_ranges:
             part_size0 = 0
 
-    # 3) 本体ダウンロード（MSXML2）
     for attempt in range(1, max_retries + 1):
         part_size = current_partial_size(temp_path)
         try:
@@ -178,17 +170,16 @@ if __name__ == "__main__":
     # download_url = "https://mentor.ieee.org/802.11/dcn/25/11-25-1818-00-0PAR-par-review-sc-mtg-agenda-and-comment-slides-2025-november-bangkok.pptx"
     download_path = to_double_backslash_literal(r'C:\Users\yohei\Downloads')
 
-    # --- (F) HTTPセッション準備（3GPP FTP / Cookie取得） ---
     LANDING, sess = get_landing_and_session("IEEE")
 
     try:
         ext = download_file_safely_msxml2(
             download_url,
-            download_path,              # フォルダ or フルパスどちらでもOK
+            download_path,
             "3gpp",
-            session=sess,               # ★ Cookie を自動で付与
-            referer=LANDING,            # ★ Referer も付与
-            # proxy="http://proxy.example.com:8080",  # 必要なら
+            session=sess,
+            referer=LANDING,
+            # proxy="http://proxy.example.com:8080",
             connect_timeout=10,
             read_timeout=180,
             max_retries=5,

@@ -6,7 +6,12 @@ from pathlib import Path
 from typing import Optional, Any, Union
 import pandas as pd
 
-def get_html_url_3gpp(folder_abs_path: str, filename: str, sheet: Union[int, str] = 0) -> Optional[Any]:
+def get_html_url_3gpp(
+        folder_abs_path: str,
+        filename: str,
+        sheet: Union[int, str] = 0,
+    ) -> Optional[Any]:
+    
     excel_path = Path(folder_abs_path) / filename
     if not excel_path.is_absolute():
         raise ValueError(f"{emo.warn} folder_abs_path は絶対パスで指定してください。")

@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 from pathlib import PureWindowsPath
 
 def to_double_backslash_literal(
-        p: str
+        p: str,
     ) -> str:
     if p is None:
         return ""
@@ -17,7 +17,7 @@ def to_double_backslash_literal(
     return s.replace("\\", "\\\\")
 
 def get_landing_and_session(
-        kind: str
+        kind: str,
     )-> tuple[str, requests.Session]:
     
     kind_norm = (kind or "").strip().lower()
@@ -47,7 +47,7 @@ def get_landing_and_session(
     return LANDING, sess
 
 def normalize_proxy_for_msxml2(
-        p: Optional[str]
+        p: Optional[str],
     ) -> Optional[str]:
     if not p:
         return None
@@ -55,7 +55,7 @@ def normalize_proxy_for_msxml2(
 
 def cookie_header_from_session(
         session,
-        url: str
+        url: str,
     ) -> str:
     if session is None or not getattr(session, "cookies", None):
         return ""
@@ -77,7 +77,7 @@ def cookie_header_from_session(
     return "; ".join(pairs)
 
 def sanitize_filename(
-        name: str
+        name: str,
     ) -> str:
     for ch in r'<>:"/\|?*':
         name = name.replace(ch, "_")
@@ -85,6 +85,6 @@ def sanitize_filename(
     return name or "page"
 
 def is_dir_like(
-        path: str
+        path: str,
     ) -> bool:
     return (os.path.isdir(path) or path.endswith(("\\", "/")))

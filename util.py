@@ -2,33 +2,29 @@ import sys, pathlib
 sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 from emoji.emoscript import emo
 
-from pathlib import Path
-
-from typing import Union, Optional
-from typing import Iterable, Union, List, overload
-
 import os
 import re
 import pandas as pd
-
+from pathlib import Path
 from urllib.parse import urlparse, parse_qs
-
-
+from typing import Union, Optional, Iterable, Union, List, overload
 
 from folder_and_file.create_subfolder_when_absent import (
     create_subfolder_when_absent,
-)
+    )
 
-def _sanitize_token(s: str) -> str:
-    """
-    ファイル名用に安全化（空白を削除、禁止文字を '_' に）。
-    """
+def _sanitize_token(
+        s: str
+    ) -> str:
     s = (s or "").strip()
-    s = re.sub(r'\.html?$', '', s, flags=re.I)           # 末尾の .html / .htm は除去
-    s = re.sub(r'[\\/:*?"<>|\s]+', "_", s)               # 禁止/空白 -> _
+    s = re.sub(r'\.html?$', '', s, flags=re.I)
+    s = re.sub(r'[\\/:*?"<>|\s]+', "_", s)
     return s
 
-def _change_drive(base: Path, drive: str) -> Path:
+def _change_drive(
+        base: Path,
+        drive: str
+    ) -> Path:
     d = (drive or "").strip().rstrip(":").upper()
     if not d or len(d) != 1 or not d.isalpha():
         raise ValueError(f"Invalid drive: {drive!r}")
@@ -36,18 +32,26 @@ def _change_drive(base: Path, drive: str) -> Path:
     s2 = re.sub(r"^[A-Za-z]:", f"{d}:", s)
     return Path(s2)
 
-def _sanitize_filename(s: str) -> str:
+def _sanitize_filename(
+        s: str
+    ) -> str:
     s = (s or "").strip()
     return re.sub(r'[\\/:\*\?"<>\|]+', "_", s)
 
-def cell(df, r: int, c: int) -> str:
+def cell(
+        df,
+        r: int,
+        c: int
+    ) -> str:
     try:
         v = df.iat[r, c]
     except Exception:
         v = None
     return "" if (v is None or pd.isna(v)) else str(v).strip()
 
-def get_downloads_path(drive: Optional[str] = None) -> Path:
+def get_downloads_path(
+        drive: Optional[str] = None
+    ) -> Path:
     home = Path.home()
     names = ["Downloads", "downloads", "Download", "ダウンロード"]
 
@@ -99,8 +103,8 @@ def build_case_folder_from_excel(
         dtype=str
     )
 
-    date = _sanitize_filename(cell(df, 0, 1))     # B1
-    case_id = _sanitize_filename(cell(df, 1, 1))  # B2
+    date = _sanitize_filename(cell(df, 0, 1))
+    case_id = _sanitize_filename(cell(df, 1, 1))
 
     if not date or not case_id:
         raise ValueError(f"{emo.warn} B1/B2 が空です。date='{date}' case_id='{case_id}'")
@@ -115,7 +119,9 @@ def build_case_folder_from_excel(
 
     return target.resolve()
 
-def _get_3gpp_html_name_single(url: str) -> str:
+def _get_3gpp_html_name_single(
+        url: str
+    ) -> str:
     if url is None:
         raise ValueError(f"{emo.warn} URL が None です。")
     url = str(url).strip()
@@ -123,7 +129,7 @@ def _get_3gpp_html_name_single(url: str) -> str:
         raise ValueError(f"{emo.warn} URL が空文字です。")
 
     parsed = urlparse(url)
-    segments = [s for s in parsed.path.split('/') if s]  # 空を除外
+    segments = [s for s in parsed.path.split('/') if s]
 
     if not segments:
         raise ValueError(f"{emo.warn} URLにパスがありません: {url}")
@@ -148,7 +154,10 @@ def _get_3gpp_html_name_single(url: str) -> str:
 def get_3gpp_html_name(urls: str) -> str: ...
 @overload
 def get_3gpp_html_name(urls: Iterable[str]) -> List[str]: ...
-def get_3gpp_html_name(urls: Union[str, Iterable[str]]) -> Union[str, List[str]]:
+def get_3gpp_html_name(
+        urls: Union[str, Iterable[str]]
+    ) -> Union[str, List[str]]:
+
     if isinstance(urls, str):
         return _get_3gpp_html_name_single(urls)
 
@@ -160,7 +169,9 @@ def get_3gpp_html_name(urls: Union[str, Iterable[str]]) -> Union[str, List[str]]
             raise ValueError(f"{emo.warn} {i} 番目のURLでエラー: {e}") from e
     return results
 
-def _get_ieee_html_name_single(url: str) -> str:
+def _get_ieee_html_name_single(
+        url: str
+    ) -> str:
     if url is None:
         raise ValueError(f"{emo.warn} URL が None です。")
     url = str(url).strip()
@@ -168,13 +179,13 @@ def _get_ieee_html_name_single(url: str) -> str:
         raise ValueError(f"{emo.warn} URL が空文字です。")
 
     parsed = urlparse(url)
-    segments = [s for s in parsed.path.split('/') if s]  # 空を除外
+    segments = [s for s in parsed.path.split('/') if s]
 
     if not segments:
         raise ValueError(f"{emo.warn} URLにパスがありません: {url}")
 
     q = parse_qs(parsed.query, keep_blank_values=True)
-    q = {k.lower(): v for k, v in q.items()}  # キーを小文字化して頑健に
+    q = {k.lower(): v for k, v in q.items()}
 
     def first(*keys: str) -> str | None:
         for k in keys:
@@ -203,7 +214,9 @@ def _get_ieee_html_name_single(url: str) -> str:
 def get_ieee_html_name(urls: str) -> str: ...
 @overload
 def get_ieee_html_name(urls: Iterable[str]) -> List[str]: ...
-def get_ieee_html_name(urls: Union[str, Iterable[str]]) -> Union[str, List[str]]:
+def get_ieee_html_name(
+        urls: Union[str, Iterable[str]]
+    ) -> Union[str, List[str]]:
     if isinstance(urls, str):
         return _get_ieee_html_name_single(urls)
 

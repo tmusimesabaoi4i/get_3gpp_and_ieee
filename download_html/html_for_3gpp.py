@@ -10,34 +10,40 @@ from typing import Optional
 
 from pure_download.download_util import (
     get_landing_and_session,
-)
+    )
 
 from pure_download.download_html import (
     download_html_safely_msxml2,
-)
+    )
 
 from folder_and_file.file_exists_in_folder import (
     file_exists_in_folder,
-)
+    )
 
 from folder_and_file.delete_if_exists import (
     delete_if_exists,
-)
+    )
 
 from folder_and_file.create_subfolder_when_absent import (
     create_subfolder_when_absent,
-)
+    )
 
 from generate_html_url_from_xlsx.html_url_3gpp import (
     get_html_url_3gpp,
-)
+    )
 
 from util import (
     build_case_folder_from_excel,
     get_3gpp_html_name,
-)
+    )
 
-def download_html_for_3gpp(folder_abs_path: str, filename: str, drive: Optional[str] = None, proxy: Optional[str] = None) -> None:
+def download_html_for_3gpp(
+        folder_abs_path: str,
+        filename: str,
+        drive: Optional[str] = None,
+        proxy: Optional[str] = None,
+    ) -> None:
+
     p = Path(folder_abs_path) / filename
     if not p.is_absolute():
         raise ValueError(f"{emo.warn} folder_abs_path は絶対パスで指定してください。")

@@ -6,16 +6,19 @@ import re
 from urllib.parse import urlsplit, urlunsplit
 from typing import List
 
-def build_ieee_doc_urls_dirty(val: str, n_last: int) -> List[str]:
+def build_ieee_doc_urls_dirty(
+        val: str,
+        n_last: int
+    ) -> List[str]:
     parts = urlsplit(val)
     q = parts.query
     m = re.match(r"^n=(\d+)(.*)$", q)
     if not m:
         raise ValueError(f"{emo.warn} 想定外のクエリ形式です（例: n=1XXX を想定）: " + q)
 
-    suffix_raw = m.group(2)  # 例: 'XXX' or '&foo=bar'
-    suffix = suffix_raw.lstrip("&")  # 'XXX' または 'foo=bar'
-    suffix_part = f"&{suffix}" if suffix else ""  # '&XXX' or '&foo=bar' or ''
+    suffix_raw = m.group(2)
+    suffix = suffix_raw.lstrip("&")
+    suffix_part = f"&{suffix}" if suffix else ""
 
     base = urlunsplit((parts.scheme, parts.netloc, parts.path, "", parts.fragment))
 

@@ -51,5 +51,5 @@ if __name__ == "__main__":
     folder1  = "project_2"
     folder2  = "project"
 
-    create_subfolder_when_absent(folder, folder1)  # 存在すればメッセージを表示し、True を返す
-    create_subfolder_when_absent(folder, folder2)  # 何も表示せず、False を返す
+    create_subfolder_when_absent(folder, folder1)
+    create_subfolder_when_absent(folder, folder2)

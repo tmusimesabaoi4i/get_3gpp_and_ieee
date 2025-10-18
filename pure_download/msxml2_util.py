@@ -169,7 +169,7 @@ def msxml2_request(
     raise RuntimeError(f"MSXML2 request failed (url={current_url}, status={last_status}, location={last_location})")
 
 def msxml2_read_body_bytes(
-        http
+        http,
     ) -> bytes:
     rb = http.responseBody
     try:
@@ -178,7 +178,7 @@ def msxml2_read_body_bytes(
         return bytes(bytearray(rb))
 
 def msxml2_all_headers_dict(
-        http
+        http,
     ) -> dict:
     raw = http.getAllResponseHeaders() or ""
     hdrs = {}
@@ -199,7 +199,7 @@ def probe_remote_msxml2(
         url: str,
         headers: dict,
         timeouts_ms: tuple[int,int,int,int],
-        proxy: Optional[str]
+        proxy: Optional[str],
     ) -> None:
     total_size = None
     accept_ranges = False

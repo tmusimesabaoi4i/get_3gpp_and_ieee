@@ -1,6 +1,10 @@
 from pathlib import Path
 
-def delete_if_exists(folder_abs_path: str, filename: str) -> bool:
+def delete_if_exists(
+        folder_abs_path: str,
+        filename: str
+    ) -> bool:
+    
     p = Path(folder_abs_path) / filename
     if not p.is_absolute():
         raise ValueError(f"{emo.warn} folder_abs_path は絶対パスで指定してください。")

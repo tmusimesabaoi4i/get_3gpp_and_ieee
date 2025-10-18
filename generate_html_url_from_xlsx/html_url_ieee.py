@@ -9,26 +9,43 @@ from html import unescape
 from typing import Tuple, List, Optional, Any, Union
 
 from generate_html_url_from_xlsx.build_ieee_doc_urls import (
-    build_ieee_doc_urls_dirty,
-)
+        build_ieee_doc_urls_dirty,
+    )
 
 from pure_download.download_util import (
-    get_landing_and_session,
-)
+        get_landing_and_session,
+    )
 
 from pure_download.download_html import (
-    download_html_safely_msxml2,
-)
+        download_html_safely_msxml2,
+    )
 
 from folder_and_file.file_exists_in_folder import (
-    file_exists_in_folder,
-)
+        file_exists_in_folder,
+    )
 
 from folder_and_file.delete_if_exists import (
-    delete_if_exists,
-)
+        delete_if_exists,
+    )
 
-def _normalize_html_for_marker(s: str) -> str:
+_MARKER_RE = re.compile( (
+            r"</table></div>"
+            r"<div[^>]*class=\"main_bottom\"[^>]*>"
+            r"<div[^>]*class=\"tools\"[^>]*>"
+            r"<div[^>]*class=\"task_menu\"[^>]*>"
+            r"<a[^>]*href=\"(?:https?://mentor\.ieee\.org)?/802\.11/check-uploader\"[^>]*>"
+            r"joingroup</a>"
+        ),
+        re.I,
+    )
+
+_DOCNUM_RE = re.compile(
+    r"(?:https?://mentor\.ieee\.org)?/802\.11/documents\?n=(\d+)", re.I
+    )
+
+def _normalize_html_for_marker(
+        s: str
+    ) -> str:
     s = unescape(s)
     s = re.sub(r"<!--.*?-->", "", s, flags=re.S)
     s = re.sub(r"<script\b[^>]*>.*?</script>", "", s, flags=re.S | re.I)
@@ -37,33 +54,22 @@ def _normalize_html_for_marker(s: str) -> str:
     s = re.sub(r"\s+", "", s).lower()
     return s
 
-_MARKER_RE = re.compile(
-    (
-        r"</table></div>"
-        r"<div[^>]*class=\"main_bottom\"[^>]*>"
-        r"<div[^>]*class=\"tools\"[^>]*>"
-        r"<div[^>]*class=\"task_menu\"[^>]*>"
-        r"<a[^>]*href=\"(?:https?://mentor\.ieee\.org)?/802\.11/check-uploader\"[^>]*>"
-        r"joingroup</a>"
-    ),
-    re.I,
-)
-
-_DOCNUM_RE = re.compile(
-    r"(?:https?://mentor\.ieee\.org)?/802\.11/documents\?n=(\d+)", re.I
-)
-
-def find_pager_anchor_pos(html_path: Path) -> Tuple[int, int, str]:
+def find_pager_anchor_pos(
+        html_path: Path,
+    ) -> Tuple[int, int, str]:
     raw = html_path.read_text(encoding="utf-8", errors="ignore")
     compact_lower = _normalize_html_for_marker(raw)
 
     m = _MARKER_RE.search(compact_lower)
     if not m:
-        return -1, -1, compact_lower  # 見つからない場合
+        return -1, -1, compact_lower
 
     return m.start(), m.end(), compact_lower
 
-def _extract_ieee_document_page_numbers(folder_abs_path: str, filename: str) -> List[int]:
+def _extract_ieee_document_page_numbers(
+        folder_abs_path: str,
+        filename: str,
+    ) -> List[int]:
     p = Path(folder_abs_path) / filename
     if not p.is_absolute():
         raise ValueError(f"{emo.warn} folder_abs_path は絶対パスで指定してください。")
@@ -78,7 +84,12 @@ def _extract_ieee_document_page_numbers(folder_abs_path: str, filename: str) -> 
     nums = [int(n) for n in _DOCNUM_RE.findall(tail)]
     return nums
 
-def get_html_url_ieee(folder_abs_path: str, filename: str, sheet: Union[int, str] = 0, proxy: Optional[str] = None) -> Optional[Any]:
+def get_html_url_ieee(
+        folder_abs_path: str,
+        filename: str,
+        sheet: Union[int, str] = 0,
+        proxy: Optional[str] = None,
+    ) -> Optional[Any]:
     excel_path = Path(folder_abs_path) / filename
     if not excel_path.is_absolute():
         raise ValueError(f"{emo.warn} folder_abs_path は絶対パスで指定してください。")
@@ -129,7 +140,7 @@ def get_html_url_ieee(folder_abs_path: str, filename: str, sheet: Union[int, str
 
     delete_if_exists(folder_abs_path, "tmp.html")
 
-    if not nums:  # 空リスト/空イテラブルなら True
+    if not nums:
         return val
 
     n_last = max(int(x) for x in nums)

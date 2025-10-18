@@ -37,7 +37,13 @@ from util import (
     get_ieee_html_name,
 )
 
-def download_html_for_ieee(folder_abs_path: str, filename: str, drive: Optional[str] = None, proxy: Optional[str] = None) -> None:
+def download_html_for_ieee(
+        folder_abs_path: str,
+        filename: str,
+        drive: Optional[str] = None,
+        proxy: Optional[str] = None
+    ) -> None:
+    
     p = Path(folder_abs_path) / filename
     if not p.is_absolute():
         raise ValueError(f"{emo.warn} folder_abs_path は絶対パスで指定してください。")

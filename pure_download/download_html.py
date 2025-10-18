@@ -26,8 +26,8 @@ from pure_download.download_util import (
 
 def download_html_safely_msxml2(
         download_url: str,
-        download_path: str,                 # ← ディレクトリ想定
-        filename: str,                      # ← MUST（必須）。拡張子は .html に強制
+        download_path: str,
+        filename: str,
         *,
         session=None,
         proxy: Optional[str] = None,
@@ -47,18 +47,15 @@ def download_html_safely_msxml2(
 
     file_extension = ".html"
 
-    # フォルダ指定への対応
     base = sanitize_filename(os.path.basename(filename))
 
     if not base.lower().endswith((file_extension)):
         base += file_extension
-        
-    # download_path\filename.html を作成
+
     final_path = os.path.join(download_path, base)
     os.makedirs(os.path.dirname(final_path) or ".", exist_ok=True)
     temp_path  = final_path + ".part"
 
-    # 共通ヘッダ（圧縮無効化でバイト範囲のズレ防止）
     common_headers = {
         "User-Agent": user_agent,
         "Accept": "*/*",
@@ -69,16 +66,14 @@ def download_html_safely_msxml2(
     if referer:
         common_headers["Referer"] = referer
 
-    # Cookie を session から付与
     cookie_hdr = cookie_header_from_session(session, download_url)
+
     if cookie_hdr:
         common_headers["Cookie"] = cookie_hdr
 
-    # タイムアウト（ms）
     tms = (connect_timeout * 1000, connect_timeout * 1000, read_timeout * 1000, read_timeout * 1000)
     pxy = normalize_proxy_for_msxml2(proxy)
 
-    # ---- 本体（MSXML2, 非2xxで .error.html 退避）----
     for attempt in range(1, max_retries + 1):
         try:
             print(f"{emo.start} [{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (HTML, MSXML2)")
@@ -116,17 +111,16 @@ if __name__ == "__main__":
     download_url = "https://mentor.ieee.org/802.11"
     download_path = to_double_backslash_literal(r'C:\Users\yohei\Downloads')
 
-    # --- (F) HTTPセッション準備（3GPP FTP / Cookie取得） ---
     LANDING, sess = get_landing_and_session("IEEE")
 
     try:
         ext = download_html_safely_msxml2(
             download_url,
-            download_path,              # フォルダ or フルパスどちらでもOK
+            download_path,
             "ieee",
-            session=sess,               # ★ Cookie を自動で付与
-            referer=LANDING,            # ★ Referer も付与
-            # proxy="http://proxy.example.com:8080",  # 必要なら
+            session=sess,
+            referer=LANDING,
+            # proxy="http://proxy.example.com:8080",
             connect_timeout=10,
             read_timeout=180,
             max_retries=5,
