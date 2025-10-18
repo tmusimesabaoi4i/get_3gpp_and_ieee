@@ -25,38 +25,53 @@ git push
 ```
 
 # 入力エクセル
+<table>
+  <thead>
+    <tr>
+      <th align="right">行</th>
+      <th>A列（ラベル/変数名）</th>
+      <th>B列</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- 3GPP｜① 日本語ラベル -->
+    <tr><th colspan="3" align="left">3GPP｜① 日本語ラベル</th></tr>
+    <tr><td align="right">1</td><td>日付</td><td>20251018</td></tr>
+    <tr><td align="right">2</td><td>案件番号</td><td>特願20XX-XXXXXX</td></tr>
+    <tr><td align="right">3</td><td>TSG</td><td>tsg_ran</td></tr>
+    <tr><td align="right">4</td><td>作業部会(WG)</td><td>WG2_RL2</td></tr>
+    <tr><td align="right">5</td><td>会期/会合(シリーズ)</td><td>TSGR2_105bis</td></tr>
+    <tr><td align="right">6</td><td>文書ディレクトリURL</td><td><a href="https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs">Docs</a></td></tr>
 
-| 行 | A列（ラベル/変数名）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | B列 |
-|---:|:---------------------------------------------|:----|
-|    | **3GPP｜① 日本語ラベル**                     |     |
-|  1 | 日付                                          | 20251018 |
-|  2 | 案件番号                                      | 特願20XX-XXXXXX |
-|  3 | TSG                                           | tsg_ran |
-|  4 | 作業部会(WG)                                  | WG2_RL2 |
-|  5 | 会期/会合(シリーズ)                            | TSGR2_105bis |
-|  6 | 文書ディレクトリURL                            | [Docs][3gpp_docs] |
-|    | **3GPP｜② 変数名（snake_case）**             |     |
-|  1 | date                                          | 20251018 |
-|  2 | case_id                                       | 特願20XX-XXXXXX |
-|  3 | tsg                                           | tsg_ran |
-|  4 | wg                                            | WG2_RL2 |
-|  5 | series                                        | TSGR2_105bis |
-|  6 | docs_url                                      | [Docs][3gpp_docs] |
-|    | **IEEE｜① 日本語ラベル**                      |     |
-|  1 | 日付                                          | 20251018 |
-|  2 | 案件番号                                      | 特願20XX-XXXXXX |
-|  3 | タスクグループ                                | be |
-|  4 | 年                                            | 2024 |
-|  5 | 文書一覧URL                                   | [Documents][ieee_docs] |
-|    | **IEEE｜② 変数名（snake_case）**             |     |
-|  1 | date                                          | 20251018 |
-|  2 | case_id                                       | 特願20XX-XXXXXX |
-|  3 | task_group                                    | be |
-|  4 | year                                          | 2024 |
-|  5 | docs_url                                      | [Documents][ieee_docs] |
+    <!-- 3GPP｜② 変数名（snake_case） -->
+    <tr><th colspan="3" align="left">3GPP｜② 変数名（snake_case）</th></tr>
+    <tr><td align="right">1</td><td>date</td><td>20251018</td></tr>
+    <tr><td align="right">2</td><td>case_id</td><td>特願20XX-XXXXXX</td></tr>
+    <tr><td align="right">3</td><td>tsg</td><td>tsg_ran</td></tr>
+    <tr><td align="right">4</td><td>wg</td><td>WG2_RL2</td></tr>
+    <tr><td align="right">5</td><td>series</td><td>TSGR2_105bis</td></tr>
+    <tr><td align="right">6</td><td>docs_url</td><td><a href="https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs">Docs</a></td></tr>
 
-[3gpp_docs]: https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs
-[ieee_docs]: https://mentor.ieee.org/802.11/documents?n=1&o=7d&is_group=00be&is_year=2024
+    <!-- IEEE｜① 日本語ラベル -->
+    <tr><th colspan="3" align="left">IEEE｜① 日本語ラベル</th></tr>
+    <tr><td align="right">1</td><td>日付</td><td>20251018</td></tr>
+    <tr><td align="right">2</td><td>案件番号</td><td>特願20XX-XXXXXX</td></tr>
+    <tr><td align="right">3</td><td>タスクグループ</td><td>be</td></tr>
+    <tr><td align="right">4</td><td>年</td><td>2024</td></tr>
+    <tr><td align="right">5</td><td>文書一覧URL</td>
+        <td><a href="https://mentor.ieee.org/802.11/documents?n=1&amp;o=7d&amp;is_group=00be&amp;is_year=2024">Documents</a></td></tr>
+
+    <!-- IEEE｜② 変数名（snake_case） -->
+    <tr><th colspan="3" align="left">IEEE｜② 変数名（snake_case）</th></tr>
+    <tr><td align="right">1</td><td>date</td><td>20251018</td></tr>
+    <tr><td align="right">2</td><td>case_id</td><td>特願20XX-XXXXXX</td></tr>
+    <tr><td align="right">3</td><td>task_group</td><td>be</td></tr>
+    <tr><td align="right">4</td><td>year</td><td>2024</td></tr>
+    <tr><td align="right">5</td><td>docs_url</td>
+        <td><a href="https://mentor.ieee.org/802.11/documents?n=1&amp;o=7d&amp;is_group=00be&amp;is_year=2024">Documents</a></td></tr>
+  </tbody>
+</table>
+
 
 
 
