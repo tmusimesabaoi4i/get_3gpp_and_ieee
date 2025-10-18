@@ -4,7 +4,7 @@ from emoji.emoscript import emo
 
 from pathlib import Path
 from typing import Tuple
-from folder_exists_in_folder import folder_exists_in_folder
+from folder_and_file.folder_exists_in_folder import folder_exists_in_folder
 
 def create_subfolder_when_absent(
     folder_abs_path: str,

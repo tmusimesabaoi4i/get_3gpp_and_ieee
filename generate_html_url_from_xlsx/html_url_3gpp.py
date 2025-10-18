@@ -3,17 +3,17 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 from emoji.emoscript import emo
 
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional, Any, Union
 import pandas as pd
 
-def get_html_url_3gpp(folder_abs_path: str, filename: str) -> Optional[Any]:
-    p = Path(folder_abs_path) / filename
-    if not p.is_absolute():
+def get_html_url_3gpp(folder_abs_path: str, filename: str, sheet: Union[int, str] = 0) -> Optional[Any]:
+    excel_path = Path(folder_abs_path) / filename
+    if not excel_path.is_absolute():
         raise ValueError(f"{emo.warn} folder_abs_path は絶対パスで指定してください。")
-    if not p.exists():
+    if not excel_path.exists():
         raise FileNotFoundError(f"{emo.warn} Excel ファイルが見つかりません: {p}")
 
-    suffix = p.suffix.lower()
+    suffix = excel_path.suffix.lower()
     if suffix in {".xlsx", ".xlsm"}:
         engine = "openpyxl"
     elif suffix == ".xls":
@@ -21,13 +21,14 @@ def get_html_url_3gpp(folder_abs_path: str, filename: str) -> Optional[Any]:
     else:
         raise ValueError(f"{emo.warn} 未対応の拡張子です: {suffix}（.xlsx / .xlsm / .xls）")
     df = pd.read_excel(
-        p,
-        sheet_name=0,
+        excel_path,
+        sheet_name=sheet,
         engine=engine,
         header=None,
         usecols=[1],
         skiprows=5,
-        nrows=1
+        nrows=1,
+        dtype=str
     )
 
     if df.empty:

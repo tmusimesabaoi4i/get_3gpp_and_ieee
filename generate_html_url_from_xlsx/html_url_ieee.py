@@ -6,9 +6,9 @@ import re
 import pandas as pd
 from pathlib import Path
 from html import unescape
-from typing import Tuple, List, Optional, Any
+from typing import Tuple, List, Optional, Any, Union
 
-from build_ieee_doc_urls import (
+from generate_html_url_from_xlsx.build_ieee_doc_urls import (
     build_ieee_doc_urls_dirty,
 )
 
@@ -78,14 +78,14 @@ def _extract_ieee_document_page_numbers(folder_abs_path: str, filename: str) -> 
     nums = [int(n) for n in _DOCNUM_RE.findall(tail)]
     return nums
 
-def get_html_url_ieee(folder_abs_path: str, filename: str, proxy: Optional[str] = None) -> Optional[Any]:
-    p = Path(folder_abs_path) / filename
-    if not p.is_absolute():
+def get_html_url_ieee(folder_abs_path: str, filename: str, sheet: Union[int, str] = 0, proxy: Optional[str] = None) -> Optional[Any]:
+    excel_path = Path(folder_abs_path) / filename
+    if not excel_path.is_absolute():
         raise ValueError(f"{emo.warn} folder_abs_path は絶対パスで指定してください。")
-    if not p.exists():
+    if not excel_path.exists():
         raise FileNotFoundError(f"{emo.warn} Excel ファイルが見つかりません: {p}")
 
-    suffix = p.suffix.lower()
+    suffix = excel_path.suffix.lower()
     if suffix in {".xlsx", ".xlsm"}:
         engine = "openpyxl"
     elif suffix == ".xls":
@@ -93,13 +93,14 @@ def get_html_url_ieee(folder_abs_path: str, filename: str, proxy: Optional[str] 
     else:
         raise ValueError(f"{emo.warn} 未対応の拡張子です: {suffix}（.xlsx / .xlsm / .xls）")
     df = pd.read_excel(
-        p,
-        sheet_name=0,
+        excel_path,
+        sheet_name=sheet,
         engine=engine,
         header=None,
         usecols=[1],
         skiprows=4,
-        nrows=1
+        nrows=1,
+        dtype=str
     )
 
     if df.empty:
