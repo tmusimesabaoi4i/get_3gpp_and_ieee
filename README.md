@@ -39,13 +39,13 @@ git push
 
 ### ② 変数名（snake_case）
 | 行 | A列（変数名） | B列                                                                 |
-|---:|----------------|----------------------------------------------------------------------|
-|  1 | date           | 20251018                                                             |
-|  2 | case_id        | 特願20XX-XXXXXX                                                       |
-|  3 | tsg            | tsg_ran                                                              |
-|  4 | wg             | WG2_RL2                                                              |
-|  5 | series         | TSGR2_105bis                                                         |
-|  6 | docs_url       | https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs          |
+|---:|----------------------|----------------------------------------------------------------------|
+|  1 | date                 | 20251018                                                             |
+|  2 | case_id              | 特願20XX-XXXXXX                                                       |
+|  3 | tsg                  | tsg_ran                                                              |
+|  4 | wg                   | WG2_RL2                                                              |
+|  5 | series               | TSGR2_105bis                                                         |
+|  6 | docs_url             | https://www.3gpp.org/ftp/tsg_ran/WG2_RL2/TSGR2_105bis/Docs          |
 
 ## IEEE
 ### ① 日本語ラベル
