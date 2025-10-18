@@ -1,15 +1,22 @@
-# download_utils
+# pure_download
 
-```tree /f
-└─download_utils
-        download_files.py
-        download_html.py
-        download_util.py
-        README.md
+```
+tree /f
+
+└─pure_download
+    │  download_file.py
+    │  download_html.py
+    │  download_util.py
+    │  msxml2_util.py
+    │  README.md
 ```
 
-# download_util.py
+# how to use
 
-# download_files.py
+```python
+import sys, pathlib
 
-# download_html.py
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
+from pure_download.download_html import download_html_safely_msxml2
+from pure_download.download_file import download_file_safely_msxml2
+```
