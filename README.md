@@ -55,7 +55,7 @@ git push
 |  2 | 案件番号       | 特願20XX-XXXXXX                                                                                  |
 |  3 | タスクグループ | be                                                                                               |
 |  4 | 年             | 2024                                                                                             |
-|  5 | 文書一覧URL    | https://mentor.ieee.org/802.11/documents?o=7d&is_group=00be&is_year=2024                        |
+|  5 | 文書一覧URL    | https://mentor.ieee.org/802.11/documents?n=1&o=7d&is_group=00be&is_year=2024                          |
 
 ### ② 変数名（snake_case）
 | 行 | A列（変数名） | B列                                                                                               |
@@ -64,7 +64,7 @@ git push
 |  2 | case_id        | 特願20XX-XXXXXX                                                                                  |
 |  3 | task_group     | be                                                                                                 |
 |  4 | year           | 2024                                                                                               |
-|  5 | docs_url       | https://mentor.ieee.org/802.11/documents?o=7d&is_group=00be&is_year=2024                          |
+|  5 | docs_url       | https://mentor.ieee.org/802.11/documents?n=1&o=7d&is_group=00be&is_year=2024                          |
 
 
 
