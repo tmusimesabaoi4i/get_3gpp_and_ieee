@@ -1,12 +1,12 @@
 # get_3gpp_and_ieee
 
-# how to clone
+# How To CLONE
 
 ```
 git clone https://github.com/tmusimesabaoi4i/get_3gpp_and_ieee.git
 ```
 
-# how to add
+# How To PUSH
 
 ```
 git add ./
@@ -24,7 +24,7 @@ and
 git push
 ```
 
-# How to Use
+# How To USE
 
 このツールは **Python スクリプトとして実行**しても、**単一 .exe** にビルドして実行しても使えます。  
 ここでは両方のやり方と、.exe の作り方（PyInstaller）をまとめます。

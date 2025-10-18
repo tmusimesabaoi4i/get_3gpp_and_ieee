@@ -1,6 +1,10 @@
 # main.py
 from __future__ import annotations
 
+import sys, pathlib
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
+from emoji.emoscript import emo
+
 import argparse
 import logging
 import re
@@ -38,52 +42,109 @@ def setup_logging(verbosity: int) -> None:
 def drive_type(s: str) -> str:
     s = (s or "").strip()
     if not DRIVE_RE.match(s):
-        raise argparse.ArgumentTypeError("ドライブレターは英字1文字（例: C / D / E）で指定してください。")
+        raise argparse.ArgumentTypeError(
+            f"{emo.warn} ドライブレターは英字1文字で指定してください（例: {emo.folder} C / D / E）。"
+        )
     return s.upper()
 
 def db_type(s: str) -> str:
     s = (s or "").strip().lower()
     if s not in VALID_DB:
-        raise argparse.ArgumentTypeError("解析対象DBは ieee または 3gpp を指定してください。")
+        raise argparse.ArgumentTypeError(
+            f"{emo.warn} 解析対象DBは {emo.db} ieee または 3gpp を指定してください。"
+        )
     return s
 
 def excel_path_type(s: str) -> Path:
     p = Path(s)
     if not p.is_absolute():
-        raise argparse.ArgumentTypeError("Excelパスは絶対パスで指定してください。")
+        raise argparse.ArgumentTypeError(
+            f"{emo.invalid} Excelパスは絶対パスで指定してください（例: {emo.excel} C:\\path\\to\\file.xlsx）。"
+        )
     if not p.exists():
-        raise argparse.ArgumentTypeError("指定したExcelファイルが存在しません。")
+        raise argparse.ArgumentTypeError(
+            f"{emo.ng} 指定したExcelファイルが存在しません：{p}"
+        )
     if p.suffix.lower() not in {".xlsx", ".xlsm", ".xls"}:
-        raise argparse.ArgumentTypeError("Excel拡張子ではありません（.xlsx / .xlsm / .xls）。")
+        raise argparse.ArgumentTypeError(
+            f"{emo.invalid} Excel拡張子ではありません（許可: .xlsx / .xlsm / .xls）。"
+        )
     return p
 
 # ========== CLI パーサ ==========
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="mytool",
-        description="必須: ドライブレター / 解析対象DB / 入力Excel絶対パス。オプション: プロキシ分析（既定ON）、ドライラン、冗長度。",
+        description=(
+            f"{emo.info} 必須入力：\n"
+            f"  • {emo.folder} ドライブレター（--drive）\n"
+            f"  • {emo.db} 解析対象DB（--db = ieee | 3gpp）\n"
+            f"  • {emo.excel} 入力Excelの絶対パス（--excel）\n\n"
+            f"{emo.spark} オプション：\n"
+            f"  • {emo.net} プロキシ分析（--proxy-analysis / --no-proxy-analysis, 既定=有効）\n"
+            f"  • {emo.warn} ドライラン（--dry-run）\n"
+            f"  • {emo.star} 冗長ログ（-v, -vv）"
+        ),
+        epilog=(
+            f"{emo.thick}\n"
+            f"例：\n"
+            f"  python main.py --drive C --db ieee --excel C:\\path\\to\\file.xlsx\n"
+            f"  python main.py --drive C --db 3gpp --excel C:\\work\\in.xlsx --no-proxy-analysis -vv\n"
+        ),
+        formatter_class=argparse.RawTextHelpFormatter,  # 改行そのまま表示
     )
-    # 必須3引数
-    p.add_argument("--drive", required=True, type=drive_type,
-                   help="ドライブレター（例: C / D / E）")
-    p.add_argument("--db", required=True, type=db_type, choices=sorted(VALID_DB),
-                   help="解析対象DB（ieee / 3gpp）")
-    p.add_argument("--excel", required=True, type=excel_path_type,
-                   help=r"入力Excelの絶対パス（例: C:\path\to\file.xlsx）")
 
-    # プロキシ分析（既定ON）：--no-proxy-analysis で無効化（Python 3.9+）
+    # === 必須3引数 ===
+    p.add_argument(
+        "--drive",
+        required=True,
+        type=drive_type,
+        help=f"{emo.folder} ドライブレター（例: C / D / E）",
+    )
+    p.add_argument(
+        "--db",
+        required=True,
+        type=db_type,
+        choices=sorted(VALID_DB),
+        help=f"{emo.db} 解析対象DB（ieee / 3gpp）",
+    )
+    p.add_argument(
+        "--excel",
+        required=True,
+        type=excel_path_type,
+        help=f"{emo.excel} 入力Excelの絶対パス（例: C:\\path\\to\\file.xlsx）",
+    )
+
+    # === プロキシ分析（既定ON）：--no-proxy-analysis で無効化（Python 3.9+） ===
     try:
-        p.add_argument("--proxy-analysis", action=argparse.BooleanOptionalAction,
-                       default=True, help="プロキシ分析を行う（既定: 有効）。--no-proxy-analysis で無効化。")
+        p.add_argument(
+            "--proxy-analysis",
+            action=argparse.BooleanOptionalAction,
+            default=True,
+            help=f"{emo.net} プロキシ分析を行う（既定: 有効）。--no-proxy-analysis で無効化。",
+        )
     except Exception:
         # 旧Python互換（on/off）
-        p.add_argument("--proxy-analysis", choices=["on", "off"], default="on",
-                       help="プロキシ分析（on/off、既定 on）")
+        p.add_argument(
+            "--proxy-analysis",
+            choices=["on", "off"],
+            default="on",
+            help=f"{emo.net} プロキシ分析（on/off、既定 on）",
+        )
 
-    # 既存オプション（雛形維持）
-    p.add_argument("-n", "--dry-run", action="store_true", help="実行せずに手順だけ確認")
-    p.add_argument("-v", "--verbose", action="count", default=0,
-                   help="冗長度を上げる (-v:INFO, -vv:DEBUG)")
+    # === 既存オプション（雛形維持） ===
+    p.add_argument(
+        "-n", "--dry-run",
+        action="store_true",
+        help=f"{emo.warn} 実行せずに手順だけ確認",
+    )
+    p.add_argument(
+        "-v", "--verbose",
+        action="count",
+        default=0,
+        help=f"{emo.star} 冗長度を上げる（-v:INFO, -vv:DEBUG）",
+    )
+
     return p
 
 # ========== アプリ本体（副作用をここに閉じ込めない） ==========
@@ -96,22 +157,33 @@ def run(cfg: Config) -> int:
         return 0
 
     try:
-        log.info("DB: %s / ドライブ: %s / Excel: %s", cfg.db, cfg.drive, cfg.excel_path)
-        log.info("プロキシ分析: %s", "有効" if cfg.proxy_analysis else "無効")
+        print(
+            "\n%s\n%s DB=%s\n%s DRIVE=%s\n%s EXCEL=%s\n%s"
+            % (emo.sep_full,  # 上部セパレータ
+            emo.db, cfg.db,
+            emo.folder, cfg.drive,
+            emo.excel, cfg.excel_path,
+            emo.dash_full)  # 下部セパレータ
+        )
+
+        log.info("%s プロキシ分析: %s",
+                emo.net, "有効" if cfg.proxy_analysis else "無効")
 
         # === ここに本処理 ===
-        # 例: if cfg.db == "ieee": ... / elif cfg.db == "3gpp": ...
-        #     if cfg.proxy_analysis: do_proxy_check()
-        #     process_excel(cfg.excel_path)
+        # if cfg.db == "ieee": ...
+        # elif cfg.db == "3gpp": ...
+        # if cfg.proxy_analysis: do_proxy_check()
+        # process_excel(cfg.excel_path)
 
-        print("処理が完了しました。")  # 必要に応じて結果出力
+        log.info("\n%s\n%s 処理が完了しました %s\n%s",
+                emo.sep_full, emo.success, emo.finish, emo.dash_full)
         return 0
 
     except FileNotFoundError as e:
-        log.error("ファイルが見つかりません: %s", e)
+        log.error("%s ファイルが見つかりません: %s", emo.invalid, e)
         return 2
     except Exception:
-        log.exception("予期しないエラー")
+        log.exception("%s 予期しないエラー", emo.fail)
         return 1
 
 # ========== エントリポイント ==========

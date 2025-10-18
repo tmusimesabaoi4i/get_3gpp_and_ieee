@@ -25,7 +25,7 @@ def file_exists_in_folder(folder_abs_path: str, filename: str) -> bool:
     target = folder / name_only
     exists = target.is_file()
     if exists:
-        print(f"{emo.info} {to_double_backslash_literal(str(folder))}に{to_double_backslash_literal(name_only.name)}が存在します")
+        print(f"{emo.file} {to_double_backslash_literal(str(folder))}に{to_double_backslash_literal(name_only.name)}が存在します")
     return exists
 
 def folder_exists_in_folder(folder_abs_path: str, subfolder_name: str) -> bool:
@@ -36,7 +36,7 @@ def folder_exists_in_folder(folder_abs_path: str, subfolder_name: str) -> bool:
     target = parent / name_only
     exists = target.is_dir()
     if exists:
-        print(f"{emo.info} {to_double_backslash_literal(str(parent))}に{to_double_backslash_literal(name_only.name)}が存在します")
+        print(f"{emo.folder} {to_double_backslash_literal(str(parent))}に{to_double_backslash_literal(name_only.name)}が存在します")
     return exists
 
 # ============== 実行部 ==============

@@ -39,7 +39,7 @@ def download_html_safely_msxml2(
     ) -> str:
 
     if not msxml2_available():
-        raise RuntimeError("MSXML2 ヘルパが未定義です（msxml2_request/msxml2_all_headers_dict/msxml2_read_body_bytes）。")
+        raise RuntimeError(f"{emo.warn} MSXML2 ヘルパが未定義です（msxml2_request/msxml2_all_headers_dict/msxml2_read_body_bytes）。")
     if not download_url:
         raise ValueError("download_url が指定されていません。")
     if not filename or not isinstance(filename, str):
@@ -81,25 +81,25 @@ def download_html_safely_msxml2(
     # ---- 本体（MSXML2, 非2xxで .error.html 退避）----
     for attempt in range(1, max_retries + 1):
         try:
-            print(f"{emo.info} [{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (HTML, MSXML2)")
+            print(f"{emo.start} [{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (HTML, MSXML2)")
             http = msxml2_request("GET", download_url, dict(common_headers), tms, pxy)
             status = int(http.status)
 
             if status in (418, 429):
-                raise RuntimeError(f"{status} (temporary block)")
+                raise RuntimeError(f"{emo.warn} {status} (temporary block)")
             if status < 200 or status >= 300:
                 try:
                     with open(final_path + ".error.html", "w", encoding="utf-8", newline="") as ef:
                         ef.write(getattr(http, "responseText", "") or "")
                 except Exception:
                     pass
-                raise RuntimeError(f"HTTP {status}")
+                raise RuntimeError(f"{emo.warn} HTTP {status}")
 
             html_text = http.responseText
             with open(temp_path, "w", encoding="utf-8", newline="") as f:
                 f.write(html_text or "")
             os.replace(temp_path, final_path)
-            print(f"{emo.ok} HTML 保存 → {final_path}")
+            print(f"{emo.net} HTML 保存 → {final_path}")
             return file_extension
 
         except Exception as e:
@@ -108,7 +108,7 @@ def download_html_safely_msxml2(
                 sleep(min(2 * attempt, 10))
                 continue
 
-    raise RuntimeError("HTMLのダウンロードに失敗しました。")
+    raise RuntimeError(f"{emo.fail} HTMLのダウンロードに失敗しました。")
 
 # ============== 実行部 ==============
 if __name__ == "__main__":

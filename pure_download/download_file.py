@@ -55,7 +55,7 @@ def download_file_safely_msxml2(
     ) -> str:
 
     if not msxml2_available():
-        raise RuntimeError("MSXML2 ヘルパが未定義です（msxml2_request/msxml2_all_headers_dict/msxml2_read_body_bytes）。")
+        raise RuntimeError(f"{emo.warn} MSXML2 ヘルパが未定義です（msxml2_request/msxml2_all_headers_dict/msxml2_read_body_bytes）。")
     if not download_url:
         raise ValueError("download_url が指定されていません。")
 
@@ -128,7 +128,7 @@ def download_file_safely_msxml2(
                 if if_range_token:
                     headers["If-Range"] = if_range_token
 
-            print(f"{emo.info} [{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (resume {part_size}, MSXML2)")
+            print(f"{emo.start} [{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (resume {part_size}, MSXML2)")
 
             http = msxml2_request("GET", download_url, headers, tms, pxy)
             status = int(http.status)
@@ -145,15 +145,15 @@ def download_file_safely_msxml2(
                     if ps > total_size:
                         print(f"{emo.warn} 416: 部分ファイル超過 → 切り詰めて再試行")
                         truncate_file(temp_path, total_size)
-                raise RuntimeError("Retry after 416")
+                raise RuntimeError(f"{emo.warn} Retry after 416")
 
             if part_size > 0 and "Range" in headers and status == 200:
                 part_size = 0
 
             if status in (418, 429):
-                raise RuntimeError(f"{status} (temporary block)")
+                raise RuntimeError(f"{emo.warn} (temporary block)")
             if status < 200 or status >= 300:
-                raise RuntimeError(f"HTTP {status}")
+                raise RuntimeError(f"{emo.warn} HTTP {status}")
 
             data = msxml2_read_body_bytes(http)
             mode = "ab" if part_size > 0 and status == 206 else "wb"
@@ -161,16 +161,16 @@ def download_file_safely_msxml2(
                 f.write(data)
 
             os.replace(temp_path, final_path)
-            print(f"{emo.ok} 成功（MSXML2）→ {final_path}")
+            print(f"{emo.save} 成功（MSXML2）→ {final_path}")
             return file_extension
 
         except Exception as e:
-            print(f"{emo.warn} 失敗 ({attempt}/{max_retries}) MSXML2: {e}")
+            print(f"{emo.fail} 失敗 ({attempt}/{max_retries}) MSXML2: {e}")
             if attempt < max_retries:
                 sleep(min(2 * attempt, 10))
                 continue
 
-    raise RuntimeError("ダウンロードに失敗しました。")
+    raise RuntimeError(f"{emo.fail} ダウンロードに失敗しました。")
 
 # ============== 実行部 ==============
 if __name__ == "__main__":
