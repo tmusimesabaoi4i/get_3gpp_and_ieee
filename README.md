@@ -66,6 +66,19 @@ git push
 |  4 | year           | 2024                                                                                               |
 |  5 | docs_url       | https://mentor.ieee.org/802.11/documents?n=1&o=7d&is_group=00be&is_year=2024                          |
 
+# DocList
+DocListはドキュメントを整理した関数です。
+
+### 3GPP
+| URL | 著者 | タイトル | 日付 | 文献番号 | アジェンダアイテム |
+|---|---|---|---|---|---|
+| [R2-1903000.zip](http://www.3gpp.org/ftp/TSG_RAN/WG2_RL2/TSGR2_105bis/Docs/R2-1903000.zip) | Chairman | Agenda for RAN2#105bis | 2019/3/29 13:55 | R2-1903000 | 2.1 |
+
+### IEEE
+| URL | 著者 | タイトル | 日付 | 文献番号 | バージョン |
+|---|---|---|---|---|---|
+| [11-24-1412-02-00be-tgbe-july-september-teleconference-minutes.docx](https://mentor.ieee.org/802.11/dcn/24/11-24-1412-02-00be-tgbe-july-september-teleconference-minutes.docx) | Jason Yuchen Guo (Huawei) | TGbe July September Teleconference Minutes | 10-Sep-24 | 1412 | 2 |
+
 
 # How To USE
 
