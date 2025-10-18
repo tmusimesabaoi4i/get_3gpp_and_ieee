@@ -23,3 +23,134 @@ and
 ```
 git push
 ```
+
+# How to Use
+
+このツールは **Python スクリプトとして実行**しても、**単一 .exe** にビルドして実行しても使えます。  
+ここでは両方のやり方と、.exe の作り方（PyInstaller）をまとめます。
+
+---
+
+## 1) Python で実行
+
+### ヘルプ
+```bash
+python main.py --help
+```
+
+### 例：プロキシ分析は既定で有効
+```bash
+python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx
+```
+
+### 例：ログ冗長度（INFO）
+```bash
+python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -v
+```
+
+### 例：ログ冗長度（DEBUG）
+```bash
+python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -vv
+```
+
+### 例：プロキシ分析を無効化（Python 3.9+）
+```bash
+python main.py --drive C --db 3gpp --excel C:\work\in.xlsx --no-proxy-analysis
+```
+
+### 例：旧Python（3.8 など）
+```bash
+python main.py --drive C --db 3gpp --excel C:\work\in.xlsx --proxy-analysis off
+```
+
+> **必須引数**：`--drive`（ドライブレター）, `--db`（`ieee`/`3gpp`）, `--excel`（Excel の**絶対パス**）  
+> **オプション**：`--no-proxy-analysis` または `--proxy-analysis off`（既定は有効）  
+> **ログ**：`-v`（INFO）, `-vv`（DEBUG） / `--help` で全一覧表示
+
+---
+
+## 2) .exe で実行（配布・配信用）
+
+ビルド済みの `mytool.exe` がある前提での実行例です。  
+コマンドライン・オプションは **Python 実行時と同じ**です。
+
+### ヘルプ
+```bash
+mytool.exe --help
+```
+
+### 例：プロキシ分析は既定で有効
+```bash
+mytool.exe --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx
+```
+
+### 例：ログ冗長度
+```bash
+mytool.exe --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -vv
+```
+
+### 例：プロキシ分析を無効化
+```bash
+mytool.exe --drive C --db 3gpp --excel C:\work\in.xlsx --no-proxy-analysis
+```
+
+#### ダブルクリック運用したい場合（バッチ例）
+```bat
+@echo off
+"%~dp0mytool.exe" --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -vv --log-file "%~dp0mytool.log"
+pause
+```
+
+> コンソール非表示ビルド（`-w`）だと標準出力が見えません。ログは `--log-file` を併用してください。
+
+---
+
+## 3) .exe の作り方（PyInstaller）
+
+### セットアップ
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -U pip
+pip install pyinstaller
+# （必要に応じて）requests, pywin32 など依存を追加
+pip install requests pywin32
+```
+
+### 単一ファイル .exe をビルド
+```bash
+pyinstaller -F --paths . -n mytool main.py
+```
+- 出力: `dist\mytool.exe`
+- `--paths .` はプロジェクト直下のパッケージ（例：`emoji/`, `pure_download/`）を見せるための検索パス追加
+- `pywin32`（`win32com` を使う場合）は自動同梱されます。環境によっては保険として以下を足すと安定します：
+  ```bash
+  pyinstaller -F --paths . -n mytool --hidden-import win32timezone main.py
+  ```
+
+### コンソールを出さない（GUI/バックグラウンド）
+```bash
+pyinstaller -F -w --paths . -n mytool main.py
+```
+- コンソールが出ない代わりに、**ログ出力は `--log-file` を必ず指定**してください。
+
+---
+
+## トラブルシューティング
+
+- **「モジュールが見つからない」**  
+  → `--paths .` を付けて再ビルド。インポートは**絶対インポート**（例：`from emoji.emoscript import emo`）に。
+
+- **pywin32 周りのエラー**  
+  → `pip install pywin32` 済みか確認。`--hidden-import win32timezone` を付けて再ビルド。
+
+- **HTTPS 証明書エラー**  
+  → `pip install certifi` を確認。プロキシ環境なら OS/社内ルート証明書設定も要確認。
+
+---
+
+## 仕様の要点（再掲）
+
+- **必須**：`--drive` / `--db`（`ieee` or `3gpp`）/ `--excel`（絶対パスの Excel）  
+- **プロキシ分析**：既定 **有効**。無効化は `--no-proxy-analysis`（旧Pythonは `--proxy-analysis off`）  
+- **ログ**：`-v`（INFO）, `-vv`（DEBUG）、必要なら `--log-file` でファイル保存
