@@ -1,3 +1,7 @@
+import sys, pathlib
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
+from emoji.emoscript import emo
+
 import os
 from time import sleep
 from urllib.parse import urlparse
@@ -98,15 +102,15 @@ def download_file_safely_msxml2(
     if total_size is not None and total_size >= 0:
         if part_size0 == total_size:
             os.replace(temp_path, final_path)
-            print(f"✅ 既に全量取得済み → {final_path}")
+            print(f"{emo.ok} 既に全量取得済み → {final_path}")
             return file_extension
         elif part_size0 > total_size:
-            print(f"⚠️ 部分ファイル超過: {part_size0} > {total_size} → 切り詰め")
+            print(f"{emo.warn} 部分ファイル超過: {part_size0} > {total_size} → 切り詰め")
             try:
                 truncate_file(temp_path, total_size)
                 part_size0 = total_size
             except Exception as te:
-                print(f"⚠️ 切り詰め失敗: {te} → 全量取り直し")
+                print(f"{emo.warn} 切り詰め失敗: {te} → 全量取り直し")
                 try: os.remove(temp_path)
                 except Exception: pass
                 part_size0 = 0
@@ -124,22 +128,22 @@ def download_file_safely_msxml2(
                 if if_range_token:
                     headers["If-Range"] = if_range_token
 
-            print(f"[{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (resume {part_size}, MSXML2)")
+            print(f"{emo.info} [{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (resume {part_size}, MSXML2)")
 
             http = msxml2_request("GET", download_url, headers, tms, pxy)
             status = int(http.status)
 
             if status == 416:
-                print("⚠️ 416 受信 → 再プローブして整合性回復を試行")
+                print(f"{emo.warn} 416 受信 → 再プローブして整合性回復を試行")
                 total_size, accept_ranges, if_range_token = probe_remote_msxml2(download_url, common_headers, tms, pxy)
                 ps = current_partial_size(temp_path)
                 if total_size is not None:
                     if ps == total_size:
                         os.replace(temp_path, final_path)
-                        print(f"✅ 416 だったが既に全量取得済み → {final_path}")
+                        print(f"{emo.ok} 416 だったが既に全量取得済み → {final_path}")
                         return file_extension
                     if ps > total_size:
-                        print("⚠️ 416: 部分ファイル超過 → 切り詰めて再試行")
+                        print(f"{emo.warn} 416: 部分ファイル超過 → 切り詰めて再試行")
                         truncate_file(temp_path, total_size)
                 raise RuntimeError("Retry after 416")
 
@@ -157,11 +161,11 @@ def download_file_safely_msxml2(
                 f.write(data)
 
             os.replace(temp_path, final_path)
-            print(f"✅ 成功（MSXML2）→ {final_path}")
+            print(f"{emo.ok} 成功（MSXML2）→ {final_path}")
             return file_extension
 
         except Exception as e:
-            print(f"⚠️ 失敗 ({attempt}/{max_retries}) MSXML2: {e}")
+            print(f"{emo.warn} 失敗 ({attempt}/{max_retries}) MSXML2: {e}")
             if attempt < max_retries:
                 sleep(min(2 * attempt, 10))
                 continue
@@ -191,7 +195,7 @@ if __name__ == "__main__":
             use_curl_fallback=True,
             )
             
-        print(f"📝 拡張子: {ext or '(不明)'}")
+        print(f"{emo.info} 拡張子: {ext or '(不明)'}")
     except Exception as e:
-        print(f"✗ エラー: {e}")
+        print(f"{emo.warn} エラー: {e}")
         raise

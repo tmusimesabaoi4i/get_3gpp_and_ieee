@@ -1,3 +1,7 @@
+import sys, pathlib
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
+from emoji.emoscript import emo
+
 import os
 from time import sleep
 from urllib.parse import urlparse
@@ -77,7 +81,7 @@ def download_html_safely_msxml2(
     # ---- 本体（MSXML2, 非2xxで .error.html 退避）----
     for attempt in range(1, max_retries + 1):
         try:
-            print(f"[{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (HTML, MSXML2)")
+            print(f"{emo.info} [{attempt}/{max_retries} PROXY={pxy or 'NONE'}] GET {download_url} (HTML, MSXML2)")
             http = msxml2_request("GET", download_url, dict(common_headers), tms, pxy)
             status = int(http.status)
 
@@ -95,11 +99,11 @@ def download_html_safely_msxml2(
             with open(temp_path, "w", encoding="utf-8", newline="") as f:
                 f.write(html_text or "")
             os.replace(temp_path, final_path)
-            print(f"✅ HTML 保存 → {final_path}")
+            print(f"{emo.ok} HTML 保存 → {final_path}")
             return file_extension
 
         except Exception as e:
-            print(f"⚠️ 失敗 ({attempt}/{max_retries}) MSXML2: {e}")
+            print(f"{emo.warn} 失敗 ({attempt}/{max_retries}) MSXML2: {e}")
             if attempt < max_retries:
                 sleep(min(2 * attempt, 10))
                 continue
@@ -128,7 +132,7 @@ if __name__ == "__main__":
             max_retries=5,
             )
             
-        print(f"📝 拡張子: {ext or '(不明)'}")
+        print(f"{emo.info} 拡張子: {ext or '(不明)'}")
     except Exception as e:
-        print(f"✗ エラー: {e}")
+        print(f"{emo.warn} エラー: {e}")
         raise

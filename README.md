@@ -17,3 +17,9 @@ and
 ```
 git commit --allow-empty -m "　"
 ```
+
+and
+
+```
+git push
+```
