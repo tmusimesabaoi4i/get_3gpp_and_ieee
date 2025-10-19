@@ -84,7 +84,7 @@ DocListはドキュメントを整理した関数です。
 ## 3gpp
 
 ```mermaid
-flowchartTB
+flowchart TB
     A([開始])-->B["Excel入力読取<br/>TSG、WG、会期(シリーズ)、文書ディレクトリURL<br/>例:ftp、TSG_RAN、WG2_RL2、...、Docs"]
     B-->C[文書ディレクトリ走査、取得]
     C-->D["DocList生成<br/>（寄書ID,版,日付,著者,タイトル,URL…）"]
@@ -102,7 +102,7 @@ flowchartTB
 ## ieee
 
 ```mermaid
-flowchartTB
+flowchart TB
     A([開始])-->B["Excel入力読取<br/>タスクグループ、年、会期(シリーズ)、文書一覧URL<br/>例:802.11、dcn、24、..."]
     B-->C[文書一覧ページ取得]
     C-->D["DocList生成<br/>（文書番号,日付,著者,タイトル,URL…）"]
