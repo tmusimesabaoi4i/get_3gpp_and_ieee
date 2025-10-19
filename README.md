@@ -89,9 +89,9 @@ DocListはドキュメントを整理した関数です。
   "themeVariables": { "fontSize": "12px" }
 }}%%
 flowchart TB
-  A(["`開始`"])-->D["`Excel入力読取<br/>TSG／WG／<br/>会期(シリーズ)<br/>／文書ディレクトリURL`"]
+  A(["`開始`"])-->B["`Excel入力読取<br/>TSG／WG／<br/>会期(シリーズ)<br/>／文書ディレクトリURL`"]
 
-  A-->D["`DocList生成`"]
+  B-->D["`DocList生成`"]
 
   D-->E["`条件読取<br/>アジェンダアイテム・<br/>タイトルキーワード`"]
 
@@ -111,9 +111,9 @@ flowchart TB
   "themeVariables": { "fontSize": "12px" }
 }}%%
 flowchart TB
-  A(["`開始`"])-->D["`Excel入力読取<br/>タスクグループ<br/>／年<br/>／文書一覧URL`"]
+  A(["`開始`"])-->B["`Excel入力読取<br/>タスクグループ<br/>／年<br/>／文書一覧URL`"]
 
-  A-->D["`DocList生成`"]
+  B-->D["`DocList生成`"]
 
   D-->E["`条件読取<br/>タイトルキーワード`"]
 
