@@ -101,26 +101,32 @@ flowchart TB
   F-->|一致|G["`対象寄書のダウンロード<br/>ダウンロード先<br/>（例）:C:\\Downloads<br/>{case_id}_{date}<br/>\\3gpp`"]
   F-->|不一致|D
 
-  G-->H["`10件毎に<br/>Wordに連結（.docx）<br/>出力先<br/>（例）:C:\\Downloads<br/>{case_id}_{date}<br/>\\merged`"]
+  G-->H["`10件毎に<br/>Wordに連結（.docx）<br/>出力先<br/>（例）:C:\\Downloads<br/>{case_id}_{date}<br/>\\3gpp<br/>\\merged`"]
   H-->I(["`出力・終了`"])
 ```
 
 ## ieee
 
 ```mermaid
+%%{init: {
+  "flowchart": { "htmlLabels": true, "wrappingWidth": 140, "useMaxWidth": false },
+  "themeVariables": { "fontSize": "12px" }
+}}%%
 flowchart TB
-    A([開始])-->B["`Excel入力読取`<br/>`タスクグループ、年、会期(シリーズ)、文書一覧URL<br/>例:802.11、dcn、24、...`"]
-    B-->C[文書一覧ページ取得]
-    C-->D["`DocList生成`<br/>`（文書番号,日付,著者,タイトル,URL…）`"]
+  A(["`開始`"])-->B["`Excel入力読取<br/>タスクグループ<br/>／年<br/>／文書一覧URL`"]
 
-    D-->E["`条件読取`<br/>`タイトルキーワード`"]
-    E-->F{DocListフィルタ}
-    F-->|一致|G["`対象文書のダウンロード`<br/>`ダウンロード先（例）:C:\\\\Downloads\\\\ieee`"]
-    F-->|不一致|D
+  B-->C["`文書ディレクトリ<br/>走査・取得`"]
 
-    G-->H{10件ごとに分割}
-    H-->I["`Wordに連結（.docx）`<br/>`出力先（例）:C:\\\\Work\\\\Docs\\\\merged`"]
-    I-->J([出力、終了])
+  C-->D["`DocList生成<br/>（寄書ID,版,日付,著者,<br/>タイトル,URL…）`"]
+
+  D-->E["`条件読取<br/>タイトルキーワード`"]
+
+  E-->F{"`DocListフィルタ`"}
+  F-->|一致|G["`対象寄書のダウンロード<br/>ダウンロード先<br/>（例）:C:\\Downloads<br/>{case_id}_{date}<br/>\\ieee`"]
+  F-->|不一致|D
+
+  G-->H["`10件毎に<br/>Wordに連結（.docx）<br/>出力先<br/>（例）:C:\\Downloads<br/>{case_id}_{date}<br/>\\ieee<br/>\\merged`"]
+  H-->I(["`出力・終了`"])
 ```
 
 # How To USE
