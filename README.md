@@ -79,6 +79,25 @@ DocListはドキュメントを整理した関数です。
 |---|---|---|---|---|---|
 | [11-24-1412-02-00be-tgbe-july-september-teleconference-minutes.docx](https://mentor.ieee.org/802.11/dcn/24/11-24-1412-02-00be-tgbe-july-september-teleconference-minutes.docx) | Jason Yuchen Guo (Huawei) | TGbe July September Teleconference Minutes | 10-Sep-24 | 1412 | 2 |
 
+# 処理フロー
+
+flowchart TB
+    A([開始]) --> B{対象の標準化団体}
+    B -->|3GPP| C3GPP[Excel 読取<br/>TSG / WG / 会期(シリーズ) / 文書ディレクトリURL]
+    B -->|IEEE| CIEEE[Excel 読取<br/>タスクグループ / 年 / 会期(シリーズ) / 文書一覧URL]
+
+    C3GPP --> D3GPP[DocList 生成<br/>寄書リスト化]
+    CIEEE --> DIEEE[DocList 生成<br/>寄書リスト化]
+
+    D3GPP --> E3GPP[Excel 読取（条件）<br/>アジェンダアイテム / タイトルキーワード]
+    DIEEE --> EIEEE[Excel 読取（条件）<br/>タイトルキーワード]
+
+    E3GPP --> F[条件に合致する寄書をダウンロード]
+    EIEEE --> F
+
+    F --> G[10件ごとに Word へ連結（.docxバンドル）]
+    G --> H([成果物出力 / 終了])
+
 
 # How To USE
 
