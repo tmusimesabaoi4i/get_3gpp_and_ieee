@@ -84,29 +84,30 @@ DocListはドキュメントを整理した関数です。
 ```mermaid
 flowchart TB
     A([開始]) --> B{対象の標準化団体}
-    B -->|3GPP| C3GPP[Excel 読取<br/>TSG / WG / 会期(シリーズ) / 文書ディレクトリURL]
-    B -->|IEEE| CIEEE[Excel 読取<br/>タスクグループ / 年 / 会期(シリーズ) / 文書一覧URL]
+    B -->|3GPP| C3GPP["Excel 読取\nTSG / WG / 会期(シリーズ) / 文書ディレクトリURL]
+    B -->|IEEE| CIEEE["Excel 読取\nタスクグループ / 年 / 会期(シリーズ) / 文書一覧URL]
 
-    C3GPP --> D3GPP[DocList 生成<br/>寄書リスト化]
-    CIEEE --> DIEEE[DocList 生成<br/>寄書リスト化]
+    C3GPP --> D3GPP[DocList 生成\n寄書リスト化]
+    CIEEE --> DIEEE[DocList 生成\n寄書リスト化]
 
-    D3GPP --> E3GPP[Excel 読取（条件）<br/>アジェンダアイテム / タイトルキーワード]
-    DIEEE --> EIEEE[Excel 読取（条件）<br/>タイトルキーワード]
+    D3GPP --> E3GPP["Excel 読取（条件）\nアジェンダアイテム / タイトルキーワード"]
+    DIEEE --> EIEEE["Excel 読取（条件）\nタイトルキーワード"]
 
     E3GPP --> F[条件に合致する寄書をダウンロード]
     EIEEE --> F
 
-    F --> G[10件ごとに Word へ連結（.docxバンドル）]
+    F --> G[10件ごとに Word へ連結（.docx バンドル）]
     G --> H([成果物出力 / 終了])
+
 ```
 
 ```mermaid
 flowchart TB
-    A([開始]) --> B[Excel から入力読取<br/>TSG / WG / 会期(シリーズ) / 文書ディレクトリURL]
+    A([開始]) --> B["Excel から入力読取\nTSG / WG / 会期(シリーズ) / 文書ディレクトリURL"]
     B --> C[文書ディレクトリを走査 / 取得]
-    C --> D[DocList 生成<br/>（寄書ID, 版, 日付, 著者, タイトル, URL …）]
+    C --> D["DocList 生成\n（寄書ID, 版, 日付, 著者, タイトル, URL …）"]
 
-    D --> E[Excel から条件読取<br/>アジェンダアイテム / タイトルキーワード]
+    D --> E["Excel から条件読取\nアジェンダアイテム / タイトルキーワード"]
     E --> F{DocList フィルタ}
     F -->|一致| G[対象寄書のダウンロード]
     F -->|不一致| D
@@ -114,15 +115,16 @@ flowchart TB
     G --> H{10件ごとに分割}
     H --> I[Word に連結（.docx）]
     I --> J([出力 / 終了])
+
 ```
 
 ```mermaid
 flowchart TB
-    A([開始]) --> B[Excel から入力読取<br/>タスクグループ / 年 / 会期(シリーズ) / 文書一覧URL]
+    A([開始]) --> B["Excel から入力読取\nタスクグループ / 年 / 会期(シリーズ) / 文書一覧URL"]
     B --> C[文書一覧ページを取得]
-    C --> D[DocList 生成<br/>（文書番号, 日付, 著者, タイトル, URL …）]
+    C --> D["DocList 生成\n（文書番号, 日付, 著者, タイトル, URL …）"]
 
-    D --> E[Excel から条件読取<br/>タイトルキーワード]
+    D --> E["Excel から条件読取\nタイトルキーワード"]
     E --> F{DocList フィルタ}
     F -->|一致| G[対象文書のダウンロード]
     F -->|不一致| D
@@ -130,6 +132,7 @@ flowchart TB
     G --> H{10件ごとに分割}
     H --> I[Word に連結（.docx）]
     I --> J([出力 / 終了])
+
 ```
 
 # How To USE
