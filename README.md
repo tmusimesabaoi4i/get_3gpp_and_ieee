@@ -89,7 +89,7 @@ DocListはドキュメントを整理した関数です。
   "themeVariables": { "fontSize": "12px" }
 }}%%
 flowchart TB
-  A(["`開始`"]) --> B["`Excel 入力読取<br/>TSG／WG／会期(シリーズ)／文書ディレクトリ URL<br/>例: ftp/TSG_RAN/WG2_RL2/.../Docs`"]
+  A(["`開始`"]) --> B["`Excel 入力読取<br/>TSG／WG／<br/>会期(シリーズ)<br/>／文書ディレクトリ <br/>URL例: <br/>ftp/TSG_RAN/WG2_RL2<br/>/.../Docs`"]
 
   B --> C["`文書ディレクトリ<br/>走査・取得`"]
 
@@ -98,11 +98,11 @@ flowchart TB
   D --> E["`条件読取<br/>アジェンダアイテム・<br/>タイトルキーワード`"]
 
   E --> F{"`DocList フィルタ`"}
-  F -->|一致| G["`対象寄書のダウンロード<br/>ダウンロード先<br/>（例）: C:\\Downloads<br/>\\3gpp`"]
+  F -->|一致| G["`対象寄書のダウンロード<br/>ダウンロード先<br/>（例）: C:\\Downloads<br/>{case_id}_{date}<br/>\\3gpp`"]
   F -->|不一致| D
 
   G --> H{"`10件ごとに分割`"}
-  H --> I["`Word に連結（.docx）<br/>出力先<br/>（例）: C:\\Work\\Docs<br/>\\merged`"]
+  H --> I["`Word に連結（.docx）<br/>出力先<br/>（例）: C:\\Downloads<br/>{case_id}_{date}<br/>\\merged`"]
   I --> J(["`出力・終了`"])
 ```
 
