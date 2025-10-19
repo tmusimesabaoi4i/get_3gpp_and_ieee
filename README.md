@@ -81,59 +81,40 @@ DocListはドキュメントを整理した関数です。
 
 # 処理フロー
 
+## 3gpp
+
 ```mermaid
-flowchart TB
-    A([開始]) --> B{対象の標準化団体}
-    B -->|3GPP| C3GPP["Excel 読取\nTSG / WG / 会期(シリーズ) / 文書ディレクトリURL]
-    B -->|IEEE| CIEEE["Excel 読取\nタスクグループ / 年 / 会期(シリーズ) / 文書一覧URL]
+flowchartTB
+    A([開始])-->B["Excel入力読取<br/>TSG、WG、会期(シリーズ)、文書ディレクトリURL<br/>例:ftp、TSG_RAN、WG2_RL2、...、Docs"]
+    B-->C[文書ディレクトリ走査、取得]
+    C-->D["DocList生成<br/>（寄書ID,版,日付,著者,タイトル,URL…）"]
 
-    C3GPP --> D3GPP[DocList 生成\n寄書リスト化]
-    CIEEE --> DIEEE[DocList 生成\n寄書リスト化]
+    D-->E["条件読取<br/>アジェンダアイテム、タイトルキーワード"]
+    E-->F{DocListフィルタ}
+    F-->|一致|G["対象寄書のダウンロード<br/>ダウンロード先（例）:C:\\\\Downloads\\\\3gpp"]
+    F-->|不一致|D
 
-    D3GPP --> E3GPP["Excel 読取（条件）\nアジェンダアイテム / タイトルキーワード"]
-    DIEEE --> EIEEE["Excel 読取（条件）\nタイトルキーワード"]
-
-    E3GPP --> F[条件に合致する寄書をダウンロード]
-    EIEEE --> F
-
-    F --> G[10件ごとに Word へ連結（.docx バンドル）]
-    G --> H([成果物出力 / 終了])
-
+    G-->H{10件ごとに分割}
+    H-->I["Wordに連結（.docx）<br/>出力先（例）:C:\\\\Work\\\\Docs\\\\merged"]
+    I-->J([出力、終了])
 ```
 
-```mermaid
-flowchart TB
-    A([開始]) --> B["Excel 入力読取\nTSG / WG / 会期(シリーズ) / 文書ディレクトリ URL\n例: ftp/TSG_RAN/WG2_RL2/.../Docs"]
-    B --> C[文書ディレクトリ走査 / 取得]
-    C --> D["DocList 生成\n（寄書ID, 版, 日付, 著者, タイトル, URL …）"]
-
-    D --> E["条件読取\nアジェンダアイテム / タイトルキーワード"]
-    E --> F{DocList フィルタ}
-    F -->|一致| G["対象寄書のダウンロード\nダウンロード先（例）: C:\\\\Downloads\\\\3gpp"]
-    F -->|不一致| D
-
-    G --> H{10件ごとに分割}
-    H --> I["Word に連結（.docx）\n出力先（例）: C:\\\\Work\\\\Docs\\\\merged"]
-    I --> J([出力 / 終了])
-
-```
+## ieee
 
 ```mermaid
-flowchart TB
-    A([開始]) --> B["Excel 入力読取\nタスクグループ / 年 / 会期(シリーズ) / 文書一覧 URL\n例: 802.11/dcn/24/..."]
-    B --> C[文書一覧ページ取得]
-    C --> D["DocList 生成\n（文書番号, 日付, 著者, タイトル, URL …）"]
+flowchartTB
+    A([開始])-->B["Excel入力読取<br/>タスクグループ、年、会期(シリーズ)、文書一覧URL<br/>例:802.11、dcn、24、..."]
+    B-->C[文書一覧ページ取得]
+    C-->D["DocList生成<br/>（文書番号,日付,著者,タイトル,URL…）"]
 
-    D --> E["条件読取\nタイトルキーワード"]
-    E --> F{DocList フィルタ}
-    F -->|一致| G["対象文書のダウンロード\nダウンロード先（例）: C:\\\\Downloads\\\\ieee"]
-    F -->|不一致| D
+    D-->E["条件読取<br/>タイトルキーワード"]
+    E-->F{DocListフィルタ}
+    F-->|一致|G["対象文書のダウンロード<br/>ダウンロード先（例）:C:\\\\Downloads\\\\ieee"]
+    F-->|不一致|D
 
-    G --> H{10件ごとに分割}
-    H --> I["Word に連結（.docx）\n出力先（例）: C:\\\\Work\\\\Docs\\\\merged"]
-    I --> J([出力 / 終了])
-
-
+    G-->H{10件ごとに分割}
+    H-->I["Wordに連結（.docx）<br/>出力先（例）:C:\\\\Work\\\\Docs\\\\merged"]
+    I-->J([出力、終了])
 ```
 
 # How To USE
