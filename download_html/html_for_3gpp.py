@@ -77,16 +77,12 @@ def download_html_for_3gpp(
     html_path = Path(base_path) / "HTML"
 
     LANDING, sess = get_landing_and_session("3gpp")
-
-    print(url_3gpp)
-    print(html_path)
-    print(html_file_name_3gpp)
     
     if not file_exists_in_folder(html_path, html_file_name_3gpp):
         ext = download_html_safely_msxml2(
-            str(url_3gpp),
-            str(html_path),
-            str(html_file_name_3gpp),
+            url_3gpp,
+            html_path,
+            html_file_name_3gpp,
             session=sess,
             referer=LANDING,
             proxy=proxy,

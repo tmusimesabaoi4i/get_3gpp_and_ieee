@@ -7,7 +7,7 @@ from time import sleep
 from urllib.parse import urlparse
 from typing import Optional
 
-from msxml2_util import (
+from pure_download.msxml2_util import (
     msxml2_all_headers_dict,
     msxml2_available,
     msxml2_request,
@@ -15,7 +15,7 @@ from msxml2_util import (
     probe_remote_msxml2,
 )
 
-from download_util import (
+from pure_download.download_util import (
     cookie_header_from_session,
     get_landing_and_session,
     is_dir_like,

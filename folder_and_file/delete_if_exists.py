@@ -1,3 +1,7 @@
+import sys, pathlib
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
+from emoji.emoscript import emo
+
 from pathlib import Path
 
 def delete_if_exists(
