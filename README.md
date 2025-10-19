@@ -85,26 +85,25 @@ DocListはドキュメントを整理した関数です。
 
 ```mermaid
 %%{init: {
-  "flowchart": { "htmlLabels": true, "useMaxWidth": false, "wrappingWidth": 140 },
+  "flowchart": { "htmlLabels": true, "wrappingWidth": 140, "useMaxWidth": false },
   "themeVariables": { "fontSize": "12px" }
 }}%%
 flowchart TB
-  A([開始]) --> B["Excel入力読取<br/>TSG ／ WG ／ 会期(シリーズ) ／ 文書ディレクトリ URL<br/><code>例: ftp/TSG_RAN/WG2_RL2/.../Docs</code>"]
+  A(["`開始`"]) --> B["`Excel 入力読取<br/>TSG／WG／会期(シリーズ)／文書ディレクトリ URL<br/>例: ftp/TSG_RAN/WG2_RL2/.../Docs`"]
 
-  B --> C["文書ディレクトリ走査・取得"]
+  B --> C["`文書ディレクトリ走査・取得`"]
 
-  C --> D["DocList生成<br/>（寄書ID, 版, 日付, 著者, タイトル, URL …）"]
+  C --> D["`DocList 生成<br/>（寄書ID, 版, 日付, 著者, タイトル, URL …）`"]
 
-  D --> E["条件読取<br/>アジェンダアイテム・タイトルキーワード"]
+  D --> E["`条件読取<br/>アジェンダアイテム・タイトルキーワード`"]
 
-  E --> F{DocListフィルタ}
-  F -->|一致| G["対象寄書のダウンロード<br/><code>ダウンロード先: C:\\Downloads\\3gpp</code>"]
+  E --> F{"`DocList フィルタ`"}
+  F -->|一致| G["`対象寄書のダウンロード<br/>ダウンロード先（例）: C:\\Downloads\\3gpp`"]
   F -->|不一致| D
 
-  G --> H{10件ごとに分割}
-  H --> I["Wordに連結（.docx）<br/><code>出力先: C:\\Work\\Docs\\merged</code>"]
-  I --> J([出力・終了])
-
+  G --> H{"`10件ごとに分割`"}
+  H --> I["`Word に連結（.docx）<br/>出力先（例）: C:\\Work\\Docs\\merged`"]
+  I --> J(["`出力・終了`"])
 ```
 
 ## ieee
