@@ -144,6 +144,10 @@ python main.py --help
 python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx
 ```
 
+```bash
+python main.py --drive C --db 3gpp --excel C:\Users\yohei\Downloads\3gpp_input.xlsx
+```
+
 ### 例：ログ冗長度（INFO）
 ```bash
 python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -v
