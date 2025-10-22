@@ -3,7 +3,7 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 from emoji.emoscript import emo
 
 from pathlib import Path
-
+from typing import Optional,List,Dict,Any
 from pure_download.download_file import (
     download_file_safely_msxml2,
 )
@@ -44,7 +44,7 @@ from folder_and_file.file_exists_in_folder import (
     file_exists_in_folder,
     )
 
-def fetch_3gpp_docs(proxy: Optional[str], folder_abs_path: str, filename: str) -> List[Dict[str, Any]]:
+def fetch_3gpp_docs(folder_abs_path: str, filename: str, proxy: Optional[str]) -> List[Dict[str, Any]]:
     """
     3GPPのDocListに基づいてZIPをダウンロードするワークフローを実行する関数。
 
@@ -109,6 +109,8 @@ def fetch_3gpp_docs(proxy: Optional[str], folder_abs_path: str, filename: str) -
                 "row": row_key,
                 "url": download_url,
                 "filename": basename,
+                "download_path": str(download_path),
+                "name": str(zip_name),
                 "saved_path": str(download_path / zip_name),
                 "ext": ".zip",
                 "skipped": True,
@@ -137,7 +139,9 @@ def fetch_3gpp_docs(proxy: Optional[str], folder_abs_path: str, filename: str) -
                 "row": row_key,
                 "url": download_url,
                 "filename": basename,
-                "saved_path": str(saved),
+                "download_path": str(download_path),
+                "name": str(zip_name),
+                "saved_path": str(download_path / zip_name),
                 "ext": ext,
                 "skipped": False,
             })

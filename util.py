@@ -9,6 +9,8 @@ from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 from typing import Union, Optional, Iterable, Union, List, overload
 
+import subprocess
+
 from folder_and_file.create_subfolder_when_absent import (
     create_subfolder_when_absent,
     )
@@ -227,3 +229,166 @@ def get_ieee_html_name(
         except Exception as e:
             raise ValueError(f"{emo.warn} {i} 番目のURLでエラー: {e}") from e
     return results
+
+
+def _normalize_to_http_scheme(target: str) -> str:
+    """
+    任意の表記（host:port, http://..., https://..., user:pass@host:port など）を
+    常に http:// スキームの URL 文字列に正規化して返す。
+    """
+    if not target:
+        raise ValueError("empty proxy string")
+
+    s = target.strip()
+    # 全角 ; ＝ を半角に
+    s = s.replace("；", ";").replace("＝", "=")
+
+    # 既存スキームは除去して http:// を付け直す（user:pass@ を保持）
+    s = re.sub(r'^[a-z][a-z0-9+.\-]*://', '', s, flags=re.I)
+    s = s.lstrip('/')  # 変な先頭スラッシュを念のため除去
+    return f"http://{s}"
+
+def _extract_mapping_value(proxy_blob: str, prefer: str = "http") -> Optional[str]:
+    """
+    'http=host:port;https=host:port' のような文字列から希望スキームの値を抜き出す。
+    単一 'host:port' 形式ならそれを返す。
+    """
+    if not proxy_blob:
+        return None
+
+    s = proxy_blob.strip().replace("；", ";").replace("＝", "=")
+
+    # 'http=...;https=...' 形式
+    if '=' in s:
+        mapping = {}
+        for part in s.split(';'):
+            part = part.strip()
+            if not part:
+                continue
+            if '=' in part:
+                k, v = part.split('=', 1)
+                mapping[k.strip().lower()] = v.strip()
+        # 優先スキーム → 代替スキーム(https) → 代替スキーム(http) → 最初の値
+        if prefer in mapping and mapping[prefer]:
+            return mapping[prefer]
+        if prefer != "https" and "https" in mapping and mapping["https"]:
+            return mapping["https"]
+        if prefer != "http" and "http" in mapping and mapping["http"]:
+            return mapping["http"]
+        # どれも無い場合は最初の非空値
+        for v in mapping.values():
+            if v:
+                return v
+        return None
+
+    # 単一 'host:port' 形式
+    return s or None
+
+def _read_cmd_output(args: list[str]) -> str:
+    """
+    コマンドを実行して標準出力を文字列で返す（文字化けを避けるためエンコーディング広めに許容）。
+    エラー時は空文字を返す。
+    """
+    try:
+        cp = subprocess.run(
+            args,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="ignore",
+        )
+        if cp.returncode != 0:
+            return ""
+        return cp.stdout or ""
+    except Exception:
+        return ""
+
+def get_proxy_from_cmd(prefer: str = "http", allow_env_fallback: bool = True) -> Optional[str]:
+    """
+    コマンドプロンプトの出力からプロキシ設定を取得し、'http://host:port' 形式の文字列を返す。
+    見つからない場合は None を返す。
+
+    探索順:
+      1) netsh winhttp show proxy（WinHTTP プロキシ）
+      2) reg query HKCU ... Internet Settings（WinINET/IE の ProxyServer/ProxyEnable）
+      3) 環境変数 HTTPS_PROXY / HTTP_PROXY（allow_env_fallback=True の場合）
+
+    Parameters
+    ----------
+    prefer : str
+        'http' または 'https' を推奨スキームとして解釈に使う（デフォルト 'http'）。
+    allow_env_fallback : bool
+        True のとき、最後に環境変数をフォールバックとして参照。
+
+    Returns
+    -------
+    Optional[str]
+        正規化済み 'http://host:port' 形式の文字列。見つからなければ None。
+    """
+    prefer = (prefer or "http").lower()
+
+    # 1) netsh winhttp show proxy
+    out = _read_cmd_output(["netsh", "winhttp", "show", "proxy"])
+    if out:
+        # 直接接続判定（英/日 両対応）
+        if ("Direct access" in out) or ("直接アクセス" in out):
+            pass  # 何もしない（次の手段へ）
+        else:
+            # "Proxy Server(s) : ..." または "プロキシ サーバー : ..."
+            m = re.search(r"Proxy Server(?:\(s\))?\s*:\s*(.+)", out, flags=re.I)
+            if not m:
+                m = re.search(r"プロキシ\s*サーバー\s*:\s*(.+)", out)
+            if m:
+                value = m.group(1).strip()
+                picked = _extract_mapping_value(value, prefer=prefer)
+                if picked:
+                    return _normalize_to_http_scheme(picked)
+
+    # 2) レジストリ（WinINET / IE）
+    # ProxyEnable が 1 のときのみ ProxyServer を採用
+    en_out = _read_cmd_output([
+        "reg", "query",
+        r"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings",
+        "/v", "ProxyEnable"
+    ])
+    enabled = False
+    if en_out:
+        # 行末の 0x1 / 0x0 を拾う
+        m = re.search(r"\b0x([0-9a-fA-F]+)\b", en_out)
+        if m and int(m.group(1), 16) == 1:
+            enabled = True
+
+    if enabled:
+        sv_out = _read_cmd_output([
+            "reg", "query",
+            r"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings",
+            "/v", "ProxyServer"
+        ])
+        if sv_out:
+            # 値は 'REG_SZ    http=host:port;https=...' など
+            m = re.search(r"ProxyServer\s+REG_\w+\s+(.+)", sv_out)
+            if m:
+                value = m.group(1).strip()
+                picked = _extract_mapping_value(value, prefer=prefer)
+                if picked:
+                    return _normalize_to_http_scheme(picked)
+
+    # 3) 環境変数（フォールバック）
+    if allow_env_fallback:
+        env = os.environ
+        cand = None
+        if prefer == "https":
+            cand = env.get("HTTPS_PROXY") or env.get("https_proxy") \
+                   or env.get("HTTP_PROXY") or env.get("http_proxy")
+        else:
+            cand = env.get("HTTP_PROXY") or env.get("http_proxy") \
+                   or env.get("HTTPS_PROXY") or env.get("https_proxy")
+        if cand:
+            return _normalize_to_http_scheme(cand)
+
+    return None
+
+# 使い方例:
+if __name__ == "__main__":
+    p = get_proxy_from_cmd(prefer="http", allow_env_fallback=True)
+    print("Detected proxy:", p)

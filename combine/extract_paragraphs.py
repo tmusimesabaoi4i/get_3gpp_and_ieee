@@ -173,7 +173,7 @@ def paragraphs_to_html(grouped: Dict[str, Dict]) -> str:
     """
     parts: List[str] = []
     parts.append("<!DOCTYPE html>")
-    parts.append('<html lang="ja">')
+    parts.append('<html lang="en">')
     parts.append('<meta charset="UTF-8">')
     parts.append("<title>抽出テキスト</title>")
     parts.append("<body>")
@@ -207,8 +207,9 @@ def paragraphs_to_html(grouped: Dict[str, Dict]) -> str:
 
 # -------------------- メイン --------------------
 def convert_office_to_html(
-    dir_list: Iterable[str],
-    file_list: Iterable[str],
+    # dir_list: Iterable[str],
+    # file_list: Iterable[str],
+    path_lst: Iterable[str],
     output_html_path: str | Path,
 ) -> Path:
     """
@@ -229,12 +230,26 @@ def convert_office_to_html(
     ppt_app  = None
     grouped: Dict[str, Dict] = {}
 
-    try:
-        for d, f in zip(dir_list, file_list):
-            src = Path(d) / f
+    all_n = len(path_lst)
+    rep = 1
 
+    try:
+        # ③ 対象ファイルをループ処理
+        for item in path_lst:  # ← zip(...) にしない！
+            # item が "(dir, filename)" のペアか、フルパスかを判定
+            if isinstance(item, (tuple, list)):
+                if len(item) >= 2:
+                    d, f = item[0], item[1]
+                    src = Path(str(d)) / str(f)
+                else:
+                    # 要素数が1のタプル/リストならその要素をパスとして扱う
+                    src = Path(str(item[0]))
+            else:
+                # フルパス（文字列 or Path）想定
+                src = Path(str(item))
+
+            # 存在しないファイルは静かにスキップ
             if not src.exists():
-                # 存在しないファイルは静かにスキップ
                 continue
 
             ext = src.suffix.lower()
@@ -243,7 +258,8 @@ def convert_office_to_html(
                 continue
 
             file_disp = src.name  # 見出し表示
-
+            print("[combining...."+str(round(rep/all_n*100))+" % is done]")
+            rep = rep + 1
             try:
                 if ext in WORD_EXTS:
                     if word_app is None:

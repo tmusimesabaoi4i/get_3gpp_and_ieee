@@ -13,6 +13,50 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
+from util import (
+    get_proxy_from_cmd,
+    get_downloads_path,
+    build_case_folder_from_excel,
+)
+
+from download_html.html_for_3gpp import(
+    download_html_for_3gpp
+)
+
+from download_html.html_for_ieee import(
+    download_html_for_ieee
+)
+
+from make_doc_list.make_doc_list_3gpp import(
+    make_doc_list_3gpp
+)
+
+from make_doc_list.make_doc_list_ieee import(
+    make_doc_list_ieee
+)
+
+from download_doc.download_doc_3gpp import(
+    fetch_3gpp_docs
+)
+
+from download_doc.download_doc_ieee import(
+    fetch_ieee_docs
+)
+
+from download_doc.save_results_to_xlsx import(
+    save_results_to_xlsx,
+    write_res_zip_paths_to_xlsx,
+    read_column_as_list
+)
+
+from about_zip.extract_zip_to_docs import(
+    extract_zip_to_docs_from_fold
+)
+
+from combine.extract_paragraphs import(
+    convert_office_to_html
+)
+
 # ========== 定数 ==========
 VALID_DB = {"ieee", "3gpp"}
 DRIVE_RE = re.compile(r"^[A-Za-z]$")
@@ -174,6 +218,38 @@ def run(cfg: Config) -> int:
         # elif cfg.db == "3gpp": ...
         # if cfg.proxy_analysis: do_proxy_check()
         # process_excel(cfg.excel_path)
+
+        MY_DB = cfg.db
+
+        MY_PROXY = get_proxy_from_cmd(prefer="http", allow_env_fallback=True)
+        MY_DRIVE = cfg.drive
+        MY_DOWNLOAD_PATH = get_downloads_path(MY_DRIVE)
+        MY_INPUT_XLSX_PATH = build_case_folder_from_excel(MY_DOWNLOAD_PATH,"input_"+MY_DB+".xlsx")
+
+        if MY_DB == "3gpp":
+            print("3gpp")
+            download_html_for_3gpp(MY_DOWNLOAD_PATH,"input_"+MY_DB+".xlsx",drive=MY_DRIVE,proxy=MY_PROXY)
+            make_doc_list_3gpp(MY_DOWNLOAD_PATH,"input_"+MY_DB+".xlsx",drive=MY_DRIVE)
+            res = fetch_3gpp_docs(MY_DOWNLOAD_PATH,"input_"+MY_DB+".xlsx",proxy=MY_PROXY)
+            save_results_to_xlsx(res,MY_DOWNLOAD_PATH,"out_"+MY_DB)
+            res_zip = extract_zip_to_docs_from_fold(MY_DOWNLOAD_PATH,"out_"+MY_DB)
+            write_res_zip_paths_to_xlsx(res_zip,MY_DOWNLOAD_PATH,"out_file_"+MY_DB)
+            l = read_column_as_list(MY_DOWNLOAD_PATH,"out_file_"+MY_DB,0)
+            convert_office_to_html(l,MY_DOWNLOAD_PATH / "combine.html")
+
+
+        if MY_DB == "ieee":
+            print("ieee")
+            download_html_for_ieee(MY_DOWNLOAD_PATH,"input_"+MY_DB+".xlsx",drive=MY_DRIVE,proxy=MY_PROXY)
+            make_doc_list_ieee(MY_DOWNLOAD_PATH,"input_"+MY_DB+".xlsx",drive=MY_DRIVE)
+            res = fetch_ieee_docs(MY_DOWNLOAD_PATH,"input_"+MY_DB+".xlsx",proxy=MY_PROXY)
+            save_results_to_xlsx(res,MY_DOWNLOAD_PATH,"out_"+MY_DB)
+            l = read_column_as_list(MY_DOWNLOAD_PATH,"out_"+MY_DB,6)
+            convert_office_to_html(l,MY_DOWNLOAD_PATH / "combine.html")
+            
+
+
+
 
         log.info("\n%s\n%s 処理が完了しました %s\n%s",
                 emo.sep_full, emo.success, emo.finish, emo.dash_full)

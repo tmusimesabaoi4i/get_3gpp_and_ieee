@@ -5,7 +5,7 @@ from emoji.emoscript import emo
 import os
 from pathlib import Path
 from urllib.parse import urlparse
-
+from typing import Optional,List,Dict,Any
 from pure_download.download_file import (
     download_file_safely_msxml2,
 )
@@ -46,7 +46,7 @@ from folder_and_file.file_exists_in_folder import (
     file_exists_in_folder,
     )
     
-def fetch_ieee_docs(proxy: Optional[str], folder_abs_path: str, filename: str) -> List[Dict[str, Any]]:
+def fetch_ieee_docs(folder_abs_path: str, filename: str, proxy: Optional[str]) -> List[Dict[str, Any]]:
     """
     IEEE DocListに基づいてファイルをダウンロードするワークフロー。
 
@@ -115,6 +115,8 @@ def fetch_ieee_docs(proxy: Optional[str], folder_abs_path: str, filename: str) -
                 "row": row_key,
                 "url": download_url,
                 "filename": basename,
+                "download_path": str(download_path),
+                "name": str(exist_name),
                 "saved_path": str(download_path / exist_name),
                 "ext": ext_guess,
                 "skipped": True,
@@ -143,7 +145,9 @@ def fetch_ieee_docs(proxy: Optional[str], folder_abs_path: str, filename: str) -
                 "row": row_key,
                 "url": download_url,
                 "filename": basename,
-                "saved_path": str(saved),
+                "download_path": str(download_path),
+                "name": str(stem),
+                "saved_path": str(download_path / stem),
                 "ext": ext,
                 "skipped": False,
             })
