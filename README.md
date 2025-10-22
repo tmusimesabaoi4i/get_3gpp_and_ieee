@@ -222,6 +222,20 @@ pip install pyinstaller
 pip install requests pywin32
 ```
 
+or
+
+```bash
+.\.venv\Scripts\python -m nuitka main.py ^
+  --msvc=latest ^
+  --standalone --onefile ^
+  --include-package=pandas ^
+  --include-package=openpyxl ^
+  --include-module=win32com,win32com.client,pythoncom,pywintypes ^
+  --nofollow-import-to=pandas.tests,pandas.testing,pytest,hypothesis,IPython,pydoc ^
+  --windows-console-mode=attach ^
+  --lto=yes --assume-yes-for-downloads
+```
+
 ### 単一ファイル .exe をビルド
 ```bash
 pyinstaller -F --paths . -n mytool main.py
