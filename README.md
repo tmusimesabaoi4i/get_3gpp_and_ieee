@@ -141,21 +141,21 @@ python main.py --help
 
 ### 例：プロキシ分析は既定で有効
 ```bash
-python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx
+python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\input_ieee.xlsx
 ```
 
 ```bash
-python main.py --drive C --db 3gpp --excel C:\Users\yohei\Downloads\3gpp_input.xlsx
+python main.py --drive C --db 3gpp --excel C:\Users\yohei\Downloads\input_3gpp.xlsx
 ```
 
 ### 例：ログ冗長度（INFO）
 ```bash
-python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -v
+python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\input_ieee.xlsx -v
 ```
 
 ### 例：ログ冗長度（DEBUG）
 ```bash
-python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -vv
+python main.py --drive C --db ieee --excel C:\Users\yohei\Downloads\input_ieee.xlsx -vv
 ```
 
 ### 例：プロキシ分析を無効化（Python 3.9+）
@@ -186,12 +186,12 @@ mytool.exe --help
 
 ### 例：プロキシ分析は既定で有効
 ```bash
-mytool.exe --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx
+mytool.exe --drive C --db ieee --excel C:\Users\yohei\Downloads\input_ieee.xlsx
 ```
 
 ### 例：ログ冗長度
 ```bash
-mytool.exe --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -vv
+mytool.exe --drive C --db ieee --excel C:\Users\yohei\Downloads\input_ieee.xlsx -vv
 ```
 
 ### 例：プロキシ分析を無効化
@@ -202,7 +202,7 @@ mytool.exe --drive C --db 3gpp --excel C:\work\in.xlsx --no-proxy-analysis
 #### ダブルクリック運用したい場合（バッチ例）
 ```bat
 @echo off
-"%~dp0mytool.exe" --drive C --db ieee --excel C:\Users\yohei\Downloads\ieee_input.xlsx -vv --log-file "%~dp0mytool.log"
+"%~dp0mytool.exe" --drive C --db ieee --excel C:\Users\yohei\Downloads\input_ieee.xlsx -vv --log-file "%~dp0mytool.log"
 pause
 ```
 
